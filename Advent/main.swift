@@ -10,15 +10,10 @@ import Foundation
 
 print("Advent Puzzle Solutions from adventofcode.com")
 print("")
-
 //Day1().Solve()
-
 //Day2().Solve()
-
 //Day3().Solve()
-
 //Day4().Solve()
-
 //Day5().Solve()
-
 Day6().Solve()
+print("")

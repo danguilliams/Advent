@@ -57,7 +57,7 @@ enum Act {
     case Toggle
 }
 
-class Command {
+class LightCommand {
     
     var xRange:Range<Int>
     var yRange:Range<Int>
@@ -84,75 +84,67 @@ class Command {
         xRange = startDirs[0]...endDirs[0]
         yRange = startDirs[1]...endDirs[1]
     }
-    
 }
 
-/* 
-
-Grid for first part of problem.
-Bools required to keep state for 'toggle' commands 
-
+/*
+    Grid for first part of problem.
+    Bools keep on/off state for the lights
 */
 class Grid {
-    let size = 1000
-    var g = [[Bool]](count: 1000, repeatedValue:[Bool](count: 1000, repeatedValue: false))
-    var on:Int = 0;
+    private var lights:[[Bool]] = [[Bool]](count: 1000, repeatedValue:[Bool](count: 1000, repeatedValue: false))
+    var totalOn:Int = 0;
     
-    func Apply(let c:Command) {
+    func Apply(let c:LightCommand) {
         for i in c.xRange {
             for j in c.yRange {
                 switch c.action{
                 case Act.On:
-                    if !g[i][j] {
-                        g[i][j] = true
-                        on++
+                    if !lights[i][j] {
+                        lights[i][j] = true
+                        totalOn++
                     }
                 case Act.Off:
-                    if g[i][j] {
-                        g[i][j] = false
-                        on--
+                    if lights[i][j] {
+                        lights[i][j] = false
+                        totalOn--
                     }
                 case Act.Toggle:
-                    g[i][j] = !g[i][j]
-                    g[i][j] ? on++ : on--
+                    lights[i][j] = !lights[i][j]
+                    lights[i][j] ? totalOn++ : totalOn--
                 }
             }
         }
-    }
-    
-    func Count() -> Int {
-        return on
     }
 }
 
+/*
+    Grid for second part of problem. 
+    Ints used to keep track of brightness for each light
+*/
 class Grid2 {
-    let size = 1000
-    var g = [[Int]](count: 1000, repeatedValue:[Int](count: 1000, repeatedValue: 0))
-    var brightness:Int = 0;
+    private var lights:[[Int]] = [[Int]](count: 1000, repeatedValue:[Int](count: 1000, repeatedValue: 0))
+    var totalBrightness:Int = 0;
     
-    func Apply(let c:Command) {
+    func Apply(let c:LightCommand) {
         for i in c.xRange {
             for j in c.yRange {
                 switch c.action{
                 case Act.On:
-                    g[i][j] += 1
-                    brightness += 1
+                    lights[i][j] += 1
+                    totalBrightness += 1
                 case Act.Off:
-                    if g[i][j] > 0 {
-                        g[i][j] -= 1
-                        brightness -= 1
+                    if lights[i][j] > 0 {
+                        lights[i][j] -= 1
+                        totalBrightness -= 1
                     }
                 case Act.Toggle:
-                    g[i][j] += 2
-                    brightness += 2
+                    lights[i][j] += 2
+                    totalBrightness += 2
                 }
             }
         }
     }
-    
-    func Count() -> Int {
-        return brightness
-    }
+
 }
 
 class Day6 {
@@ -165,23 +157,19 @@ class Day6 {
         assert(filemgr.fileExistsAtPath(inputFilePath))
         
         let content = try! String(contentsOfFile: inputFilePath, encoding: NSUTF8StringEncoding)
-        let lines = content.characters.split { $0 == "\n" || $0 == "\r\n" }.map(String.init)
+        let lines = content.characters.split{ $0 == "\n" || $0 == "\r\n" }.map(String.init)
         
         let grid = Grid()
         let grid2 = Grid2()
-        for l in lines {
-            let command = Command(cmd:l)
+        for line in lines {
+            let command = LightCommand(cmd:line)
             grid.Apply(command)
             grid2.Apply(command)
         }
         
-        print("  Pt1: Number of lights on: \(grid.Count())")
-        print("  Pt2: Total Brightness of lights:\(grid2.Count())")
+        print("  Pt1: Number of lights on: \(grid.totalOn)")
+        print("  Pt2: Total Brightness of lights: \(grid2.totalBrightness)")
+        print("")
     }
 
 }
-
-
-
-
-

@@ -5,7 +5,7 @@
 //  
 //  Copied from https://gist.github.com/albertbori/0faf7de867d96eb83591
 //
-//  Updated for Swift 2.0
+//  Updated for Swift 2.1
 
 import Foundation
 
@@ -89,22 +89,6 @@ extension String
             }
         }
         return index
-    }
-    
-    private var vowels: [String]
-        {
-        get
-        {
-            return ["a", "e", "i", "o", "u"]
-        }
-    }
-    
-    private var consonants: [String]
-        {
-        get
-        {
-            return ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z"]
-        }
     }
     
 }
