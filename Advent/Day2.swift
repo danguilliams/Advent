@@ -39,19 +39,16 @@ Your puzzle answer was 3737498.
 */
 
 import Foundation
-import Cocoa
 
-class Day2 {
+class Day2 : DayBase {
     
-    func Solve() {
-        let filemgr = NSFileManager.defaultManager()
-        let inputFilePath = "/Users/danielguilliams/Documents/Playground/advent2.txt"
-
-        assert(filemgr.fileExistsAtPath(inputFilePath))
+    init() {
+        super.init(day:2, filePath:"/Users/danielguilliams/Documents/Playground/advent2.txt")
+    }
+    
+    override func DoSolve() {
         
-        let content = try! String(contentsOfFile: inputFilePath, encoding: NSUTF8StringEncoding)
-        
-        let lines = content.characters.split { $0 == "\n" || $0 == "\r\n" }.map(String.init)
+        let lines = puzzleContent.characters.split { $0 == "\n" || $0 == "\r\n" }.map(String.init)
         
         var paperTotal = 0;
         var ribbonTotal = 0;
@@ -74,12 +71,8 @@ class Day2 {
             count += 1
         }
 
-        print("Day 2 results:")
-        print("  Total presents: \(count)")
-        print("  Total paper required: \(paperTotal)")
-        print("  Total ribbon required: \(ribbonTotal)")
-        print("")
+        print("  Total presents wrapped: \(count)")
+        print("  Pt1: Total paper required: \(paperTotal)")
+        print("  Pt2: Total ribbon required: \(ribbonTotal)")
     }
-    
-    
 }
