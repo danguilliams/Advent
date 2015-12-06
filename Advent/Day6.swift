@@ -67,9 +67,7 @@ class LightCommand {
         let tokens = cmd.characters.split {$0 == " "}.map(String.init)
         
         var i = 1
-        if tokens[0] == "toggle" {
-            action = Act.Toggle
-        }
+        if tokens[0] == "toggle" { action = Act.Toggle }
         else if tokens[1] == "off" {
             action = Act.Off
             i += 1
@@ -147,29 +145,26 @@ class Grid2 {
 
 }
 
-class Day6 {
+class Day6 : DayBase {
     
-    func Solve() {
-        print("Day 6 results:")
-        let filemgr = NSFileManager.defaultManager()
-        let inputFilePath = "/Users/danielguilliams/Documents/Playground/advent6.txt"
-        
-        assert(filemgr.fileExistsAtPath(inputFilePath))
-        
-        let content = try! String(contentsOfFile: inputFilePath, encoding: NSUTF8StringEncoding)
-        let lines = content.characters.split{ $0 == "\n" || $0 == "\r\n" }.map(String.init)
-        
+    init() {
+        super.init(day: 6, filePath:"/Users/danielguilliams/Documents/Playground/advent6.txt")
+    }
+    
+    override func DoSolve() {
+        let lines = puzzleContent.characters.split{ $0 == "\n" || $0 == "\r\n" }.map(String.init)
+
+        var commands:Array<LightCommand> = [LightCommand]()
         let grid = Grid()
         let grid2 = Grid2()
-        for line in lines {
-            let command = LightCommand(cmd:line)
-            grid.Apply(command)
-            grid2.Apply(command)
-        }
         
+        for line in lines { commands.append(LightCommand(cmd:line)) }
+        
+        for cmd in commands { grid.Apply(cmd) }
         print("  Pt1: Number of lights on: \(grid.totalOn)")
+        
+        for cmd in commands { grid2.Apply(cmd) }
         print("  Pt2: Total Brightness of lights: \(grid2.totalBrightness)")
-        print("")
     }
 
 }

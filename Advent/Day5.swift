@@ -31,24 +31,20 @@ Your puzzle answer was 255.
 
 import Foundation
 
-class Day5 {
+class Day5 : DayBase {
     
-    func Solve() {
-        let filemgr = NSFileManager.defaultManager()
-        let inputFilePath = "/Users/danielguilliams/Documents/Playground/advent5.txt"
-        
-        assert(filemgr.fileExistsAtPath(inputFilePath))
-        
-        let content = try! String(contentsOfFile: inputFilePath, encoding: NSUTF8StringEncoding)
-        print("Day 5 results:")
-        Solve1(content)
-        Solve2(content)
+    init() {
+        super.init(day:5, filePath:"/Users/danielguilliams/Documents/Playground/advent5.txt")
+    }
+    
+    override func DoSolve() {
+        let lines = puzzleContent.characters.split { $0 == "\n" || $0 == "\r\n" }.map(String.init)
+        Solve1(lines)
+        Solve2(lines)
         print("")
     }
     
-    private func Solve1(let content: String) {
-        
-        let lines = content.characters.split { $0 == "\n" || $0 == "\r\n" }.map(String.init)
+    private func Solve1(let lines: [String]) {
         
         var niceCount:Int = 0
         
@@ -101,9 +97,7 @@ class Day5 {
     
     */
     
-    private func Solve2(let content: String) {
-        
-        let lines = content.characters.split { $0 == "\n" || $0 == "\r\n" }.map(String.init)
+    private func Solve2(let lines: [String]) {
         
         var niceCount:Int = 0
         

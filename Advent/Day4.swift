@@ -35,23 +35,23 @@ Your puzzle answer was 3938038.
 
 */
 
-class Day4 {
+class Day4 : DayBase{
     
-    func Solve() {
-        print("Day 4 results:")
-        Solve(5)
-        Solve(6)
-        print("")
-        
+    init() {
+        super.init(day:4, content:"ckczppom")
     }
     
-    private func Solve(let num0s:Int) {
-        let code = "ckczppom"
+    override func DoSolve() {
+        SolveHash(5, part: 1)
+        SolveHash(6, part: 2)        
+    }
+    
+    private func SolveHash(let num0s:Int, let part:Int) {
         var val:Int = 0
         
         while true {
             
-            let bytes = md5(string: "\(code)\(val)")
+            let bytes = md5(string: "\(puzzleContent)\(val)")
             
             let wholeBytes = num0s / 2
             
@@ -72,7 +72,7 @@ class Day4 {
             val += 1
         }
         
-        print("  Value for \(num0s) 0s: \(val)")
+        print("  Value for part \(part):(\(num0s) 0s): \(val)")
     }
 }
 
