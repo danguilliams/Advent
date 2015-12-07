@@ -41,7 +41,6 @@ Your puzzle answer was 2341.
 
 */
 
-
 class Day3 : DayBase {
     
     init() {
