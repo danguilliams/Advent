@@ -126,7 +126,7 @@ class Grid2 {
     func Apply(let c:LightCommand) {
         for i in c.xRange {
             for j in c.yRange {
-                switch c.action{
+                switch c.action {
                 case Act.On:
                     lights[i][j] += 1
                     totalBrightness += 1
@@ -154,7 +154,7 @@ class Day6 : DayBase {
     override func DoSolve() {
         let lines = puzzleContent.characters.split{ $0 == "\n" || $0 == "\r\n" }.map(String.init)
 
-        var commands:Array<LightCommand> = [LightCommand]()
+        var commands:[LightCommand] = [LightCommand]()
         let grid = Grid()
         let grid2 = Grid2()
         
@@ -166,5 +166,4 @@ class Day6 : DayBase {
         for cmd in commands { grid2.Apply(cmd) }
         print("  Pt2: Total Brightness of lights: \(grid2.totalBrightness)")
     }
-
 }
