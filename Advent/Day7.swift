@@ -44,6 +44,13 @@ i: 65079
 x: 123
 y: 456
 In little Bobby's kit's instructions booklet (provided as your puzzle input), what signal is ultimately provided to wire a?
+
+--- Part Two ---
+
+Now, take the signal you got on wire a, override wire b to that signal, and reset the other wires (including wire a). What new signal is ultimately provided to wire a?
+
+Your puzzle answer was 3176.
+
 */
 
 import Foundation
@@ -58,6 +65,30 @@ class Day7 : DayBase {
     }
     
     override func DoSolve() {
+        DoSolve1()
+        DoSolve2()
+    }
+    
+    func DoSolve2() {
+        Reload()
+        let newB = Wire(id: "b")
+        newB.resolved = true;
+        newB.signal = 3176
+        wires["b"] = newB
+        instructions.filter{ $0.targetWireId == "b" }.forEach { $0.evaluated = true }
+        RunInstructions()
+        print("  Pt 2 Signal on wire 'a': \(wires["a"]!.signal)")
+    }
+    
+    func DoSolve1() {
+        Reload()
+        RunInstructions()
+        print("  Pt 1 Signal on wire 'a': \(wires["a"]!.signal)")
+    }
+    
+    func Reload() {
+        instructions = [Instruction]()
+        wires = [String:Wire]()
         let lines = puzzleContent.characters.split{ $0 == "\n" || $0 == "\r\n" }.map(String.init)
         
         for l in lines {
@@ -67,41 +98,37 @@ class Day7 : DayBase {
             TryAddSignal(instruction.inWire1)
             TryAddSignal(instruction.inWire2)
         }
-        
+    }
+    
+    func RunInstructions() {
         var remaining:Bool = true
-        var count = 0
+        
         while remaining {
             
             for i in instructions {
                 if(!i.evaluated)
                 {
-                  switch(i.op) {
-                  case Op.And:
-                      EvalAnd(i)
-                  case Op.Or:
-                      EvalOr(i)
-                  case Op.Not:
-                      EvalNot(i)
-                  case Op.RShift:
-                      EvalRShift(i)
-                  case Op.LShift:
-                      EvalLShift(i)
-                  case Op.Pure:
-                      EvalPure(i)
-                  }
+                    switch(i.op) {
+                    case Op.And:
+                        EvalAnd(i)
+                    case Op.Or:
+                        EvalOr(i)
+                    case Op.Not:
+                        EvalNot(i)
+                    case Op.RShift:
+                        EvalRShift(i)
+                    case Op.LShift:
+                        EvalLShift(i)
+                    case Op.Pure:
+                        EvalPure(i)
+                    }
                 }
             }
             
-            let remainingCt = instructions.filter { !$0.evaluated }.count
+            let remainingCt = instructions.filter{ !$0.evaluated }.count
             remaining = remainingCt > 0
-            count++
-            if count % 25 == 0 {
-                print("   \(count) loops, \(remainingCt) remaining")
-            }
         }
-        
-        print("  Signal on wire 'a': \(wires["a"]!.signal)")
-        
+
     }
     
     private func TryAddSignal(s:String) {
