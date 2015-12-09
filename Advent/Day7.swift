@@ -63,7 +63,7 @@ class Day7 : DayBase {
     var wires:[String:Wire] = [String:Wire]()
     
     init () {
-        super.init(day: 7, filePath:"/Users/danielguilliams/Documents/Playground/advent7.txt")
+        super.init(day: 7, fileName:"advent7.txt")
     }
     
     override func DoSolve() {
