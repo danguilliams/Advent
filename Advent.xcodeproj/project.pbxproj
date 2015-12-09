@@ -43,6 +43,8 @@
 		99630AF81C150DA200AEF67D /* Day7.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day7.swift; sourceTree = "<group>"; };
 		99630AFA1C150E9300AEF67D /* advent6.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent6.txt; sourceTree = "<group>"; };
 		99630AFB1C16B20800AEF67D /* Day8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day8.swift; sourceTree = "<group>"; };
+		99630AFD1C17CF6D00AEF67D /* advent7.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent7.txt; sourceTree = "<group>"; };
+		99630AFE1C17CF6D00AEF67D /* advent8.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = advent8.txt; path = ../../../../../../../../Documents/Playground/Advent/Advent/advent8.txt; sourceTree = BUILT_PRODUCTS_DIR; };
 		99E427C31C127E7D00527174 /* Advent */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Advent; sourceTree = BUILT_PRODUCTS_DIR; };
 		99E427C61C127E7D00527174 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		99E427CD1C127EB300527174 /* Day1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day1.swift; sourceTree = "<group>"; };
@@ -83,6 +85,8 @@
 		99E427C51C127E7D00527174 /* Advent */ = {
 			isa = PBXGroup;
 			children = (
+				99630AFD1C17CF6D00AEF67D /* advent7.txt */,
+				99630AFE1C17CF6D00AEF67D /* advent8.txt */,
 				99630AFA1C150E9300AEF67D /* advent6.txt */,
 				99E427D61C12C7D500527174 /* advent5.txt */,
 				99E427D31C12ABC400527174 /* advent2.txt */,

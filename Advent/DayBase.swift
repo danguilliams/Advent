@@ -13,9 +13,10 @@ public class DayBase {
     public var puzzleContent:String = ""
     public var day = 0
     
-    init(day:Int, filePath:String) {
+    init(day:Int, fileName:String) {
         self.day = day
-        
+        // filePath assumes the target file is located in the same folder as DayBase.swift, relative to the build products
+        let filePath = "../../../../../../../../Documents/Playground/Advent/Advent/" + fileName
         let filemgr = NSFileManager.defaultManager()
         assert(filemgr.fileExistsAtPath(filePath))
         puzzleContent = try! String(contentsOfFile: filePath, encoding: NSUTF8StringEncoding)

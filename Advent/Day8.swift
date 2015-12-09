@@ -50,7 +50,7 @@ import Foundation
 class Day8 : DayBase {
     
     init() {
-        super.init(day:8, filePath:"/Users/danielguilliams/Documents/Playground/advent8.txt")
+        super.init(day:8, fileName:"advent8.txt")
     }
     
     override func DoSolve(){

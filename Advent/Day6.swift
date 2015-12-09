@@ -148,7 +148,7 @@ class Grid2 {
 class Day6 : DayBase {
     
     init() {
-        super.init(day: 6, filePath:"/Users/danielguilliams/Documents/Playground/advent6.txt")
+        super.init(day: 6, fileName:"advent6.txt")
     }
     
     override func DoSolve() {
