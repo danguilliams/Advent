@@ -45,11 +45,13 @@ x: 123
 y: 456
 In little Bobby's kit's instructions booklet (provided as your puzzle input), what signal is ultimately provided to wire a?
 
+Your puzzle answer was 3176.
+
 --- Part Two ---
 
 Now, take the signal you got on wire a, override wire b to that signal, and reset the other wires (including wire a). What new signal is ultimately provided to wire a?
 
-Your puzzle answer was 3176.
+Your puzzle answer was 14710.
 
 */
 
@@ -75,7 +77,7 @@ class Day7 : DayBase {
         newB.resolved = true;
         newB.signal = 3176
         wires["b"] = newB
-        instructions.filter{ $0.targetWireId == "b" }.forEach { $0.evaluated = true }
+        instructions.filter{ $0.out == "b" }.forEach { $0.evaluated = true }
         RunInstructions()
         print("  Pt 2 Signal on wire 'a': \(wires["a"]!.signal)")
     }
@@ -94,9 +96,9 @@ class Day7 : DayBase {
         for l in lines {
             let instruction = Instruction(str: l)
             instructions.append(instruction)
-            wires[instruction.targetWireId] = Wire(id:instruction.targetWireId)
-            TryAddSignal(instruction.inWire1)
-            TryAddSignal(instruction.inWire2)
+            wires[instruction.out] = Wire(id:instruction.out)
+            TryAddSignal(instruction.in1)
+            TryAddSignal(instruction.in2)
         }
     }
     
@@ -106,29 +108,35 @@ class Day7 : DayBase {
         while remaining {
             
             for i in instructions {
-                if(!i.evaluated)
+                
+                if !i.evaluated &&
+                    wires[i.in1]!.resolved &&
+                    wires[i.in2]!.resolved
                 {
+                    
                     switch(i.op) {
-                    case Op.And:
-                        EvalAnd(i)
-                    case Op.Or:
-                        EvalOr(i)
-                    case Op.Not:
-                        EvalNot(i)
-                    case Op.RShift:
-                        EvalRShift(i)
-                    case Op.LShift:
-                        EvalLShift(i)
-                    case Op.Pure:
-                        EvalPure(i)
+                        
+                        case Op.And:
+                            wires[i.out]!.signal = wires[i.in1]!.signal & wires[i.in2]!.signal
+                        case Op.Or:
+                            wires[i.out]!.signal = wires[i.in1]!.signal | wires[i.in2]!.signal
+                        case Op.Not:
+                            wires[i.out]!.signal = ~wires[i.in1]!.signal
+                        case Op.RShift:
+                            wires[i.out]!.signal = wires[i.in1]!.signal >> wires[i.in2]!.signal
+                        case Op.LShift:
+                            wires[i.out]!.signal = wires[i.in1]!.signal << wires[i.in2]!.signal
+                        case Op.Pure:
+                            wires[i.out]!.signal = wires[i.in1]!.signal
                     }
+                    
+                    wires[i.out]!.resolved = true
+                    i.evaluated = true
                 }
             }
             
-            let remainingCt = instructions.filter{ !$0.evaluated }.count
-            remaining = remainingCt > 0
+            remaining = instructions.filter{ !$0.evaluated }.count > 0
         }
-
     }
     
     private func TryAddSignal(s:String) {
@@ -138,73 +146,6 @@ class Day7 : DayBase {
             newWire.resolved = true;
             newWire.signal = a!
             wires[s] = newWire
-        }
-    }
-    
-    private func EvalAnd(i:Instruction) {
-        if wires[i.inWire1] != nil &&
-            wires[i.inWire1]!.resolved &&
-            wires[i.inWire2] != nil &&
-            wires[i.inWire2]!.resolved {
-            
-                wires[i.targetWireId]!.signal = wires[i.inWire1]!.signal & wires[i.inWire2]!.signal
-                wires[i.targetWireId]!.resolved = true
-                i.evaluated = true
-        }
-    }
-    
-    private func EvalOr(i:Instruction) {
-        if wires[i.inWire1] != nil &&
-           wires[i.inWire1]!.resolved &&
-           wires[i.inWire2] != nil &&
-           wires[i.inWire2]!.resolved {
-           
-            wires[i.targetWireId]!.signal = wires[i.inWire1]!.signal | wires[i.inWire2]!.signal
-            wires[i.targetWireId]!.resolved = true
-            i.evaluated = true
-        }
-    }
-    
-    private func EvalNot(i:Instruction) {
-        if wires[i.inWire1] != nil &&
-            wires[i.inWire1]!.resolved {
-            
-                wires[i.targetWireId]!.signal = ~wires[i.inWire1]!.signal
-                wires[i.targetWireId]!.resolved = true
-                i.evaluated = true
-        }
-    }
-    
-    private func EvalPure(i:Instruction) {
-        if wires[i.inWire1] != nil &&
-            wires[i.inWire1]!.resolved {
-                wires[i.targetWireId]!.signal = wires[i.inWire1]!.signal
-                wires[i.targetWireId]!.resolved = true
-                i.evaluated = true
-        }
-    }
-    
-    private func EvalRShift(i:Instruction) {
-        if wires[i.inWire1] != nil &&
-            wires[i.inWire1]!.resolved &&
-            wires[i.inWire2] != nil &&
-            wires[i.inWire2]!.resolved {
-            
-                wires[i.targetWireId]!.signal = wires[i.inWire1]!.signal >> wires[i.inWire2]!.signal
-                wires[i.targetWireId]!.resolved = true
-                i.evaluated = true
-        }
-    }
-    
-    private func EvalLShift(i:Instruction) {
-        if wires[i.inWire1] != nil &&
-            wires[i.inWire1]!.resolved &&
-            wires[i.inWire2] != nil &&
-            wires[i.inWire2]!.resolved {
-            
-                wires[i.targetWireId]!.signal = wires[i.inWire1]!.signal << wires[i.inWire2]!.signal
-                wires[i.targetWireId]!.resolved = true
-                i.evaluated = true
         }
     }
     
@@ -222,36 +163,32 @@ class Day7 : DayBase {
         var resolved:Bool = false
         var signal:UInt16 = 0
         
-        init(id:String)
-        {
+        init(id:String) {
             self.id = id
         }
     }
     
-    
     // holds a definition of a instruction, which defines target node, and operation, and its input wires
     class Instruction {
-        var targetWireId:String
+        var out:String
         var op:Op
-        var inWire1:String
-        var inWire2:String
+        var in1:String
+        var in2:String
         var evaluated:Bool = false
         
         init(str:String) {
             
             let tokens = str.characters.split { $0 == " " }.map(String.init)
             
-            self.targetWireId = tokens[tokens.count - 1]
+            self.out = tokens[tokens.count - 1]
             
             if tokens[0] == "NOT" {
-                
                 self.op = Op.Not
-                self.inWire1 = tokens[1]
-                self.inWire2 = self.inWire1
+                self.in1 = tokens[1]
+                self.in2 = self.in1
             } else if tokens.count == 5 {// AND, OR, RSHIFT and LSHIFT nodes
-                
-                self.inWire1 = tokens[0]
-                self.inWire2 = tokens[2]
+                self.in1 = tokens[0]
+                self.in2 = tokens[2]
                 
                 if tokens[1] == "AND" {
                     self.op = Op.And
@@ -266,10 +203,10 @@ class Day7 : DayBase {
                 }
             } else { // direct value
                 self.op = Op.Pure
-                self.inWire1 = tokens[0]
-                self.inWire2 = inWire1
+                self.in1 = tokens[0]
+                self.in2 = in1
             }
         }
     }
-
+    
 }
