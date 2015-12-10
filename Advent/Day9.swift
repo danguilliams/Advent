@@ -70,7 +70,7 @@ class Day9 : DayBase {
     var count:Int = 0
     
     init() {
-        super.init(day:8, fileName:"advent9.txt")
+        super.init(day:9, fileName:"advent9.txt")
         
         let lines = puzzleContent.characters.split { $0 == "\n"}.map(String.init)
         
