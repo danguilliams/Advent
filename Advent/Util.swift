@@ -61,3 +61,5 @@ struct House : Hashable
 func == (lhs: House, rhs: House) -> Bool {
     return lhs.x == rhs.x && lhs.y == rhs.y
 }
+
+
