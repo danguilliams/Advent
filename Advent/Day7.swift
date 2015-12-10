@@ -139,6 +139,7 @@ class Day7 : DayBase {
         }
     }
     
+    // trys to parse a string as an int - if it suceeds, add it as a resolved wire
     private func TryAddSignal(s:String) {
         let a = UInt16(s)
         if a != nil {
