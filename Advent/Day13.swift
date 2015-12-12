@@ -13,7 +13,7 @@ import Foundation
 class Day13 : DayBase {
     
     init() {
-        super.init(day:13, fileName:"advent12.txt")
+        super.init(day:13, fileName:"advent13.txt")
     }
     
     override func DoSolve() {
