@@ -39,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		995B4AAD1C1BDDDC002E8578 /* Day12.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day12.swift; sourceTree = "<group>"; };
+		995B4AAF1C1BE40F002E8578 /* advent12.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent12.txt; sourceTree = "<group>"; };
 		99630AE91C135FE100AEF67D /* Day5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day5.swift; sourceTree = "<group>"; };
 		99630AEB1C13903000AEF67D /* Advent-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Advent-Bridging-Header.h"; sourceTree = "<group>"; };
 		99630AEE1C13906B00AEF67D /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -94,6 +95,7 @@
 		99E427C51C127E7D00527174 /* Advent */ = {
 			isa = PBXGroup;
 			children = (
+				995B4AAF1C1BE40F002E8578 /* advent12.txt */,
 				99630B011C17F4BA00AEF67D /* advent9.txt */,
 				99630AFD1C17CF6D00AEF67D /* advent7.txt */,
 				99630AFE1C17CF6D00AEF67D /* advent8.txt */,
