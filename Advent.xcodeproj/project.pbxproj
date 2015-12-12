@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		995B4AAE1C1BDDDC002E8578 /* Day12.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4AAD1C1BDDDC002E8578 /* Day12.swift */; };
 		99630AEA1C135FE100AEF67D /* Day5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99630AE91C135FE100AEF67D /* Day5.swift */; };
 		99630AEF1C13906B00AEF67D /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99630AEE1C13906B00AEF67D /* Util.swift */; };
 		99630AF31C13C3FB00AEF67D /* StringExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99630AF21C13C3FB00AEF67D /* StringExtentions.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		995B4AAD1C1BDDDC002E8578 /* Day12.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day12.swift; sourceTree = "<group>"; };
 		99630AE91C135FE100AEF67D /* Day5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day5.swift; sourceTree = "<group>"; };
 		99630AEB1C13903000AEF67D /* Advent-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Advent-Bridging-Header.h"; sourceTree = "<group>"; };
 		99630AEE1C13906B00AEF67D /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				99630AFF1C17F32C00AEF67D /* Day9.swift */,
 				99630B041C19D4CE00AEF67D /* Day10.swift */,
 				99630B061C19DEB700AEF67D /* Day11.swift */,
+				995B4AAD1C1BDDDC002E8578 /* Day12.swift */,
 				99630AF61C14DA0D00AEF67D /* DayBase.swift */,
 				99630AEE1C13906B00AEF67D /* Util.swift */,
 				99630AF21C13C3FB00AEF67D /* StringExtentions.swift */,
@@ -182,6 +185,7 @@
 				99E427D01C12808000527174 /* Day2.swift in Sources */,
 				99630AF91C150DA200AEF67D /* Day7.swift in Sources */,
 				99630AEF1C13906B00AEF67D /* Util.swift in Sources */,
+				995B4AAE1C1BDDDC002E8578 /* Day12.swift in Sources */,
 				99E427D21C12AA5200527174 /* Day3.swift in Sources */,
 				99630AFC1C16B20800AEF67D /* Day8.swift in Sources */,
 				99630AEA1C135FE100AEF67D /* Day5.swift in Sources */,
