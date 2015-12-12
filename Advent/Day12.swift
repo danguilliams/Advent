@@ -49,7 +49,7 @@ class Day12 : DayBase {
     }
     
     override func DoSolve() {
-        //Solve1()
+        Solve1()
         Solve2()
     }
     
@@ -68,23 +68,61 @@ class Day12 : DayBase {
     }
     
     private func Solve2() {
-        //try NSJSONSerialization.JSONObjectWithData
         do {
-            let data = try NSJSONSerialization.JSONObjectWithData(puzzleContent.dataUsingEncoding(NSUTF8StringEncoding)!, options: .AllowFragments)
+            let data = try NSJSONSerialization.JSONObjectWithData(puzzleContent.dataUsingEncoding(NSUTF8StringEncoding)!, options: .AllowFragments) as! [AnyObject]
     
-            Sum(data.data)
+            let sum = Sum(data)
             
-            print(data)
+            print("  Part 2 sum: \(sum)")
             
-        } catch {
-            print("Well...")
+            } catch {
+                print("Part 2 failed!")
         }
     }
     
-    private func Sum(j:NSObject) {
+    private func Sum(a:[AnyObject]) -> Int {
+        var sum:Int = 0
+        for o in a {
+            if let val = o as? NSNumber {
+                sum += val.integerValue
+            } else {
+                sum += CastAndSum(o)
+            }
+            
+        }
         
-        
-        
+        return sum
     }
     
+    private func Sum(a:[String:AnyObject]) -> Int {
+        var sum:Int = 0
+        
+        for (_,v) in a {
+            if let color = v as? NSString {
+                if color == "red" {
+                    return 0
+                }
+            }
+            else if let val = v as? NSNumber {
+                sum += val.integerValue
+            }
+            else {
+                sum += CastAndSum(v)
+            }
+        }
+
+        return sum
+    }
+    
+    private func CastAndSum(a:AnyObject) -> Int {
+        if let arr = a as? [AnyObject] {
+            return Sum(arr)
+        }
+        else if let dict = a as? [String:AnyObject] {
+            return Sum(dict)
+        }
+        else {
+            return 0
+        }
+    }
 }
