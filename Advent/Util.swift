@@ -123,4 +123,40 @@ func NextPermutation(inout s:[Int]) -> Bool {
     return done;
 }
 
+func NextPermutation(inout s:[String]) -> Bool {
+    
+    var done = true
+    
+    for (var i = s.count - 1; i > 0; i--) {
+        var curr = s[i];
+        
+        if curr < s[i - 1] {
+            continue;
+        }
+        
+        done = false;
+        
+        var currIndex = i;
+        
+        for var j = i + 1; j < s.count; j++ {
+            if s[j] < curr && s[j] > s[i - 1] {
+                curr = s[j];
+                currIndex = j;
+            }
+        }
+        
+        s[currIndex] = s[i - 1];
+        s[i - 1] = curr;
+        
+        for var j = s.count - 1; j > i; j--, i++ {
+            let tmp = s[j];
+            s[j] = s[i];
+            s[i] = tmp;
+        }
+        
+        break;
+    }
+    
+    return done;
+}
 
