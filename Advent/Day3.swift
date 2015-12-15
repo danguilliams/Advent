@@ -54,7 +54,7 @@ class Day3 : DayBase {
     
     private func Solve(let hasRoboSanta:Bool){
         
-        var visitedHouses = Set<House>()
+        var visitedHouses = Set<Coord>()
         var santaX:Int = 0;
         var santaY:Int = 0;
         var roboX:Int = 0;
@@ -63,7 +63,7 @@ class Day3 : DayBase {
         
         for c in puzzleContent.characters {
             
-            let coords = House(x: roboSanta ? roboX : santaX, y: roboSanta ? roboY : santaY)
+            let coords = Coord(x: roboSanta ? roboX : santaX, y: roboSanta ? roboY : santaY)
             
             if !visitedHouses.contains(coords)
             {
