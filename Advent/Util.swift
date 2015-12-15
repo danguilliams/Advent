@@ -41,7 +41,7 @@ func ==(lhs: Pair, rhs: Pair) -> Bool {
 /*
     Pair of two ints, x and y
 */
-struct House : Hashable
+struct Coord : Hashable
 {
     var x:Int
     var y:Int
@@ -58,8 +58,69 @@ struct House : Hashable
     
 }
 
-func == (lhs: House, rhs: House) -> Bool {
+func == (lhs: Coord, rhs: Coord) -> Bool {
     return lhs.x == rhs.x && lhs.y == rhs.y
+}
+
+private func Swap<T>(inout s1:T, inout s2:T) {
+    let tmp:T = s1
+    s1 = s2
+    s2 = tmp
+}
+
+class Edge2 {
+    let from:String
+    let to:String
+    let weight:Int
+    
+    init(from:String, to:String, weight:Int) {
+        self.from = from
+        self.to = to
+        self.weight = weight
+    }
+}
+
+/* 
+Generate permutations of the array. From http://stackoverflow.com/questions/11208446/generating-permutations-of-a-set-most-efficiently
+
+To use, sort the array in increasing order, then call NextPermutation until true is returned. 
+
+*/
+func NextPermutation(inout s:[Int]) -> Bool {
+    
+    var done = true
+    
+    for (var i = s.count - 1; i > 0; i--) {
+        var curr = s[i];
+        
+        if curr < s[i - 1] {
+            continue;
+        }
+        
+        done = false;
+
+        var currIndex = i;
+
+        for var j = i + 1; j < s.count; j++ {
+            if s[j] < curr && s[j] > s[i - 1] {
+                curr = s[j];
+                currIndex = j;
+            }
+        }
+        
+        s[currIndex] = s[i - 1];
+        s[i - 1] = curr;
+
+        for var j = s.count - 1; j > i; j--, i++ {
+            let tmp = s[j];
+            s[j] = s[i];
+            s[i] = tmp;
+        }
+        
+        break;
+    }
+
+    return done;
 }
 
 

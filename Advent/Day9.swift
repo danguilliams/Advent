@@ -48,22 +48,9 @@ Your puzzle answer was 804.
 
 import Foundation
 
-class Edge {
-    let from:String
-    let to:String
-    let weight:Int
-    
-    init(from:String, to:String, weight:Int) {
-        self.from = from
-        self.to = to
-        self.weight = weight
-    }
-}
-
-
 class Day9 : DayBase {
     
-    var edges:[Edge] = [Edge]()
+    var edges:[Edge2] = [Edge2]()
     var nodes:[String] = [String]()
     var distances:[Int] = [Int]()
     var paths:[String:Int] = [String:Int]()
@@ -78,8 +65,8 @@ class Day9 : DayBase {
             let tokens = l.characters.split { $0 == " "}.map(String.init)
             assert(tokens.count == 5)
 
-            edges.append(Edge(from:tokens[0], to:tokens[2], weight:Int(tokens[4])!))
-            edges.append(Edge(from:tokens[2], to:tokens[0], weight:Int(tokens[4])!))
+            edges.append(Edge2(from:tokens[0], to:tokens[2], weight:Int(tokens[4])!))
+            edges.append(Edge2(from:tokens[2], to:tokens[0], weight:Int(tokens[4])!))
             
             if !nodes.contains(tokens[2]) {
                 nodes.append(tokens[2])
