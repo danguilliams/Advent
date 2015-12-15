@@ -52,9 +52,9 @@ class Day9 : DayBase {
     
     var edges:[Edge2] = [Edge2]()
     var nodes:[String] = [String]()
-    var distances:[Int] = [Int]()
-    var paths:[String:Int] = [String:Int]()
     var count:Int = 0
+    var maxDistance:Int = Int.min
+    var minDistance:Int = Int.max
     
     init() {
         super.init(day:9, fileName:"advent9.txt")
@@ -77,77 +77,33 @@ class Day9 : DayBase {
     override func DoSolve(){
         // graph is completely connected
         // need to get permutations of nodes
+        nodes.sortInPlace()
         
-        /*
-        Heap's algorithm pseudocode - from wikipedia
-        
-        procedure generate(n : integer, A : array of any):
-            if n = 1 then
-                output(A)
-            else
-                for i := 0; i < n - 1; i += 1 do
-                    generate(n - 1, A)
-                    if n is even then
-                        swap(A[i], A[n-1])
-                    else
-                        swap(A[0], A[n-1])
-                    end if
-                end for
-                generate(n - 1, A)
-            end if
-        
-        */
-        
-        let n = nodes.count
-        Generate(n, s: nodes,onPermute: AddLength)
-        
-        distances.sortInPlace()
-        
-        print("unique paths: \(paths.count)")
-        //print("duplicate paths: \(paths.values.filter{$0 > 0}.count)")
-        print("  Shortest: \(distances.first!)")
-        print("  Longest: \(distances.last!)")
-        print("")
+        CalcLength()
+        while !NextPermutation(&nodes) {
+            CalcLength()
+            
+        }
+        print("\(count)")
+        print("  Pt 1: Shortest Route: \(minDistance)")
+        print("  Pt 2: Longest Route: \(maxDistance)")
     }
     
-    func AddLength(s:[String]) {
+    func CalcLength() {
+        count++
         var distance = 0
         
-        for var i = 0; i < s.count - 2; i++ {
-            distance += edges.filter{$0.to == s[i] && $0.from == s[i + 1]}.first!.weight
+        for var i = 0; i < nodes.count - 2; i++ {
+            distance += edges.filter{$0.to == nodes[i + 1] && $0.from == nodes[i]}.first!.weight
         }
-        distances.append(distance)
         
-        let path = s.joinWithSeparator(",")
+        if distance < minDistance {
+            minDistance = distance
+        }
         
-         if paths[path] != nil {
-            paths[path]! += 1
-         } else {
-            paths[path] = 0
+        if distance > maxDistance {
+            maxDistance = distance
         }
+        
     }
-    
-    private func Generate(n:Int, var s:[String], onPermute: ([String]) -> Void ){
-        if n == 1 {
-            onPermute(s)
-        } else {
-            for var i = 0; i < n - 1; i += 1 {
-                Generate(n - 1, s: s, onPermute:onPermute)
-                if n % 2 == 0 {
-                    swap(&s[i], &s[n-1])
-                } else {
-                    swap(&s[0], &s[n-1])
-                }
-            }
-            
-            Generate(n - 1, s: s, onPermute:onPermute)
-        }
-    }
-    
-    private func Swap<T>(inout s1:T, inout s2:T) {
-        let tmp:T = s1
-        s1 = s2
-        s2 = tmp
-    }
-
 }
