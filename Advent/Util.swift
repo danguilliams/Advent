@@ -8,6 +8,15 @@
 
 import Foundation
 
+
+extension String
+{
+    func trim() -> String
+    {
+        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+    }
+}
+
 /*
     Calculates a string's MD5 hash, treating them as UTF8 characters 
 

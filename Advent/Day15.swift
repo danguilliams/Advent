@@ -111,8 +111,8 @@ class Day15 : DayBase {
                         
                         let score = (cap > 0 ? cap : 0) *
                                     (dur > 0 ? dur : 0) *
-                                    (flav > 0 ? flav : 0) *
-                                    (tex > 0 ? tex : 0)
+                                    (tex > 0 ? tex : 0) *
+                                    (flav > 0 ? flav : 0)
                         
                         if score > maxCookie {
                             maxCookie = score
