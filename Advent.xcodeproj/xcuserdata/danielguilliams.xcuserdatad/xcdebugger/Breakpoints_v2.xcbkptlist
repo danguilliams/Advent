@@ -67,5 +67,53 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Advent/Day15.swift"
+            timestampString = "472012162.86453"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "DoSolve()"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Advent.Day15.DoSolve (Advent.Day15)() -&gt; ()"
+                  moduleName = "Advent"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/danielguilliams/Documents/Playground/Advent/Advent/Day15.swift"
+                  timestampString = "472012013.526261"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "79"
+                  endingLineNumber = "79"
+                  offsetFromSymbolStart = "3018">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Advent.Day15.(DoSolve (Advent.Day15) -&gt; () -&gt; ()).(closure #3)"
+                  moduleName = "Advent"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/danielguilliams/Documents/Playground/Advent/Advent/Day15.swift"
+                  timestampString = "472012013.526434"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "79"
+                  endingLineNumber = "79"
+                  offsetFromSymbolStart = "8">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

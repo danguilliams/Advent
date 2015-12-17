@@ -18,9 +18,10 @@ print("")
 //Day6().Solve() // Takes ~ 15 seconds
 //Day7().Solve() // Takes < 1 second
 //Day8().Solve() // Takes < 1 second
-Day9().Solve() // // Takes < 1 second
+//Day9().Solve() // // Takes < 1 second
 //Day10().Solve() // Takes ~ 19 seconds
 //Day11().Solve() // Takes ~ 1 second
 //Day12().Solve() // Takes < 1 second
 //Day13().Solve() // Takes 3 to 4 minutes
 //Day14().Solve() // Takes < .1 second
+Day15().Solve() // Take ~ 3 seconds
