@@ -53,6 +53,7 @@
 		995B4ABA1C2257C2002E8578 /* Day16.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day16.swift; sourceTree = "<group>"; };
 		995B4ABC1C225AEA002E8578 /* advent16.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent16.txt; sourceTree = "<group>"; };
 		995B4ABD1C226A6B002E8578 /* Day17.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day17.swift; sourceTree = "<group>"; };
+		995B4ABF1C227A05002E8578 /* advent17.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent17.txt; sourceTree = "<group>"; };
 		99630AE91C135FE100AEF67D /* Day5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day5.swift; sourceTree = "<group>"; };
 		99630AEB1C13903000AEF67D /* Advent-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Advent-Bridging-Header.h"; sourceTree = "<group>"; };
 		99630AEE1C13906B00AEF67D /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -108,6 +109,7 @@
 		99E427C51C127E7D00527174 /* Advent */ = {
 			isa = PBXGroup;
 			children = (
+				995B4ABF1C227A05002E8578 /* advent17.txt */,
 				995B4ABC1C225AEA002E8578 /* advent16.txt */,
 				995B4AB51C1FD599002E8578 /* advent14.txt */,
 				995B4AB21C1C91DE002E8578 /* advent13.txt */,
