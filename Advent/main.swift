@@ -26,4 +26,5 @@ print("")
 //Day14().Solve() // Takes < .1 second
 //Day15().Solve() // Takes ~ 3 seconds
 //Day16().Solve() // Takes < .1 
-Day17().Solve() // Takes ~ 3.5 seconds
+//Day17().Solve() // Takes ~ 3.5 seconds
+Day18().Solve()
