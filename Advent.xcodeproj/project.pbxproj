@@ -12,6 +12,7 @@
 		995B4AB41C1FD488002E8578 /* Day14.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4AB31C1FD488002E8578 /* Day14.swift */; };
 		995B4AB71C1FE9D8002E8578 /* Day15.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4AB61C1FE9D8002E8578 /* Day15.swift */; };
 		995B4ABB1C2257C2002E8578 /* Day16.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4ABA1C2257C2002E8578 /* Day16.swift */; };
+		995B4ABE1C226A6B002E8578 /* Day17.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4ABD1C226A6B002E8578 /* Day17.swift */; };
 		99630AEA1C135FE100AEF67D /* Day5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99630AE91C135FE100AEF67D /* Day5.swift */; };
 		99630AEF1C13906B00AEF67D /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99630AEE1C13906B00AEF67D /* Util.swift */; };
 		99630AF31C13C3FB00AEF67D /* StringExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99630AF21C13C3FB00AEF67D /* StringExtentions.swift */; };
@@ -51,6 +52,8 @@
 		995B4AB61C1FE9D8002E8578 /* Day15.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day15.swift; sourceTree = "<group>"; };
 		995B4ABA1C2257C2002E8578 /* Day16.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day16.swift; sourceTree = "<group>"; };
 		995B4ABC1C225AEA002E8578 /* advent16.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent16.txt; sourceTree = "<group>"; };
+		995B4ABD1C226A6B002E8578 /* Day17.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day17.swift; sourceTree = "<group>"; };
+		995B4ABF1C227A05002E8578 /* advent17.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent17.txt; sourceTree = "<group>"; };
 		99630AE91C135FE100AEF67D /* Day5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day5.swift; sourceTree = "<group>"; };
 		99630AEB1C13903000AEF67D /* Advent-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Advent-Bridging-Header.h"; sourceTree = "<group>"; };
 		99630AEE1C13906B00AEF67D /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -106,6 +109,7 @@
 		99E427C51C127E7D00527174 /* Advent */ = {
 			isa = PBXGroup;
 			children = (
+				995B4ABF1C227A05002E8578 /* advent17.txt */,
 				995B4ABC1C225AEA002E8578 /* advent16.txt */,
 				995B4AB51C1FD599002E8578 /* advent14.txt */,
 				995B4AB21C1C91DE002E8578 /* advent13.txt */,
@@ -133,6 +137,7 @@
 				995B4AB31C1FD488002E8578 /* Day14.swift */,
 				995B4AB61C1FE9D8002E8578 /* Day15.swift */,
 				995B4ABA1C2257C2002E8578 /* Day16.swift */,
+				995B4ABD1C226A6B002E8578 /* Day17.swift */,
 				99630AF61C14DA0D00AEF67D /* DayBase.swift */,
 				99630AEE1C13906B00AEF67D /* Util.swift */,
 				99630AF21C13C3FB00AEF67D /* StringExtentions.swift */,
@@ -211,6 +216,7 @@
 				99630AFC1C16B20800AEF67D /* Day8.swift in Sources */,
 				995B4ABB1C2257C2002E8578 /* Day16.swift in Sources */,
 				99630AEA1C135FE100AEF67D /* Day5.swift in Sources */,
+				995B4ABE1C226A6B002E8578 /* Day17.swift in Sources */,
 				99630B001C17F32C00AEF67D /* Day9.swift in Sources */,
 				99630B071C19DEB700AEF67D /* Day11.swift in Sources */,
 				99630AF71C14DA0D00AEF67D /* DayBase.swift in Sources */,
