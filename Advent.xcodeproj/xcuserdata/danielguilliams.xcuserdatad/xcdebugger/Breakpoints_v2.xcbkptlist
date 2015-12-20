@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Advent/Util.swift"
-            timestampString = "472013826.839386"
+            timestampString = "472265230.035446"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "NextPermutation(_:)"
             landmarkType = "7">
          </BreakpointContent>

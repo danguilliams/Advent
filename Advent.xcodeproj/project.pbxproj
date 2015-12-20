@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9955D0E01C2506760006E265 /* Day18.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955D0DF1C2506760006E265 /* Day18.swift */; };
+		9955D0E51C25F4110006E265 /* Day19.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955D0E41C25F4110006E265 /* Day19.swift */; };
 		995B4AAE1C1BDDDC002E8578 /* Day12.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4AAD1C1BDDDC002E8578 /* Day12.swift */; };
 		995B4AB11C1C9151002E8578 /* Day13.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4AB01C1C9151002E8578 /* Day13.swift */; };
 		995B4AB41C1FD488002E8578 /* Day14.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4AB31C1FD488002E8578 /* Day14.swift */; };
@@ -46,6 +47,8 @@
 /* Begin PBXFileReference section */
 		9955D0DF1C2506760006E265 /* Day18.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day18.swift; sourceTree = "<group>"; };
 		9955D0E11C2506E40006E265 /* advent18.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent18.txt; sourceTree = "<group>"; };
+		9955D0E41C25F4110006E265 /* Day19.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day19.swift; sourceTree = "<group>"; };
+		9955D0E61C25F4FB0006E265 /* advent19.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent19.txt; sourceTree = "<group>"; };
 		995B4AAD1C1BDDDC002E8578 /* Day12.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day12.swift; sourceTree = "<group>"; };
 		995B4AAF1C1BE40F002E8578 /* advent12.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent12.txt; sourceTree = "<group>"; };
 		995B4AB01C1C9151002E8578 /* Day13.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day13.swift; sourceTree = "<group>"; };
@@ -112,6 +115,7 @@
 		99E427C51C127E7D00527174 /* Advent */ = {
 			isa = PBXGroup;
 			children = (
+				9955D0E61C25F4FB0006E265 /* advent19.txt */,
 				9955D0E11C2506E40006E265 /* advent18.txt */,
 				995B4ABF1C227A05002E8578 /* advent17.txt */,
 				995B4ABC1C225AEA002E8578 /* advent16.txt */,
@@ -143,6 +147,7 @@
 				995B4ABA1C2257C2002E8578 /* Day16.swift */,
 				995B4ABD1C226A6B002E8578 /* Day17.swift */,
 				9955D0DF1C2506760006E265 /* Day18.swift */,
+				9955D0E41C25F4110006E265 /* Day19.swift */,
 				99630AF61C14DA0D00AEF67D /* DayBase.swift */,
 				99630AEE1C13906B00AEF67D /* Util.swift */,
 				99630AF21C13C3FB00AEF67D /* StringExtentions.swift */,
@@ -208,6 +213,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9955D0E51C25F4110006E265 /* Day19.swift in Sources */,
 				99E427CE1C127EB300527174 /* Day1.swift in Sources */,
 				99630B051C19D4CE00AEF67D /* Day10.swift in Sources */,
 				99630AF31C13C3FB00AEF67D /* StringExtentions.swift in Sources */,
