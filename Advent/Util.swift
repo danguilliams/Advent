@@ -8,15 +8,6 @@
 
 import Foundation
 
-
-extension String
-{
-    func trim() -> String
-    {
-        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-    }
-}
-
 /*
     Calculates a string's MD5 hash, treating them as UTF8 characters 
 
@@ -169,6 +160,50 @@ func NextPermutation(inout s:[String]) -> Bool {
     return done;
 }
 
+class ListNode<T : Equatable> {
+    var key: T? = nil
+    var next: ListNode? = nil
+    var previous: ListNode? = nil
+    init() {
+        self.key = nil
+        self.next = nil
+        self.previous = nil
+    }
+    
+    init(val:T) {
+        self.key = val
+    }
+}
+
+class LinkedList<T : Equatable> {
+    var head:ListNode<T>
+    var size:Int
+    
+    init() {
+        head = ListNode()
+        size = 0
+    }
+    
+    func Add(val:T) {
+        size += 1
+        if head.key == nil {
+            head.key = val
+            return;
+        }
+        
+        //establish the iteration variables 
+        var current: ListNode? = head
+        while (current != nil) {
+            if (current?.next == nil) {
+                let childToUse: ListNode = ListNode<T>(val:val)
+                childToUse.previous = current
+                current!.next = childToUse;
+                break;
+            }
+            current = current?.next
+        }
+    }
+}
 
 
 

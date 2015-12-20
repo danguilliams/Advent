@@ -9,6 +9,9 @@
 
 import Foundation
 
+let UpperCase:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+let LowerCase:String = "abcdefghijklmnopqrstuvqxyz"
+
 extension String
 {
     var length: Int {
@@ -25,6 +28,11 @@ extension String
     func replace(target: String, withString: String) -> String
     {
         return self.stringByReplacingOccurrencesOfString(target, withString: withString, options: NSStringCompareOptions.LiteralSearch, range: nil)
+    }
+    
+    func trim() -> String
+    {
+        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
     
     subscript (i: Int) -> Character
