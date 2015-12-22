@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9955D0E01C2506760006E265 /* Day18.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955D0DF1C2506760006E265 /* Day18.swift */; };
 		9955D0E51C25F4110006E265 /* Day19.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955D0E41C25F4110006E265 /* Day19.swift */; };
+		9955D0E81C2642A20006E265 /* Day20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955D0E71C2642A20006E265 /* Day20.swift */; };
 		995B4AAE1C1BDDDC002E8578 /* Day12.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4AAD1C1BDDDC002E8578 /* Day12.swift */; };
 		995B4AB11C1C9151002E8578 /* Day13.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4AB01C1C9151002E8578 /* Day13.swift */; };
 		995B4AB41C1FD488002E8578 /* Day14.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995B4AB31C1FD488002E8578 /* Day14.swift */; };
@@ -49,6 +50,7 @@
 		9955D0E11C2506E40006E265 /* advent18.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent18.txt; sourceTree = "<group>"; };
 		9955D0E41C25F4110006E265 /* Day19.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day19.swift; sourceTree = "<group>"; };
 		9955D0E61C25F4FB0006E265 /* advent19.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent19.txt; sourceTree = "<group>"; };
+		9955D0E71C2642A20006E265 /* Day20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day20.swift; sourceTree = "<group>"; };
 		995B4AAD1C1BDDDC002E8578 /* Day12.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day12.swift; sourceTree = "<group>"; };
 		995B4AAF1C1BE40F002E8578 /* advent12.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent12.txt; sourceTree = "<group>"; };
 		995B4AB01C1C9151002E8578 /* Day13.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day13.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				995B4ABD1C226A6B002E8578 /* Day17.swift */,
 				9955D0DF1C2506760006E265 /* Day18.swift */,
 				9955D0E41C25F4110006E265 /* Day19.swift */,
+				9955D0E71C2642A20006E265 /* Day20.swift */,
 				99630AF61C14DA0D00AEF67D /* DayBase.swift */,
 				99630AEE1C13906B00AEF67D /* Util.swift */,
 				99630AF21C13C3FB00AEF67D /* StringExtentions.swift */,
@@ -227,6 +230,7 @@
 				99630AFC1C16B20800AEF67D /* Day8.swift in Sources */,
 				995B4ABB1C2257C2002E8578 /* Day16.swift in Sources */,
 				99630AEA1C135FE100AEF67D /* Day5.swift in Sources */,
+				9955D0E81C2642A20006E265 /* Day20.swift in Sources */,
 				995B4ABE1C226A6B002E8578 /* Day17.swift in Sources */,
 				99630B001C17F32C00AEF67D /* Day9.swift in Sources */,
 				99630B071C19DEB700AEF67D /* Day11.swift in Sources */,
