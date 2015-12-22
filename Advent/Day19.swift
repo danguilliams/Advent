@@ -138,7 +138,7 @@ class Day19:DayBase {
                     // 'T' and 'i', etc, add both chars as a single node
                     molList.Add("\(one)\(two)")
                 } else {
-                    // 'H' and 'H', etc - just add first char as single node
+                    // 'H' and 'F', etc - just add first char as single node
                     molList.Add("\(one)")
                 }
             }
@@ -161,20 +161,20 @@ class Day19:DayBase {
     func CalcSteps() -> Int {
         // count the 'Rn' and 'Ar' elements
         var pElemCount = 0;
-        var yElemCount = 0;
+        // count of the 'Y' elements
+        var cElemCount = 0;
         
         var current:ListNode<String>? = molList.head
         while current != nil {
             let elem = current!.key
-            if elem == "Ar" ||
-               elem == "Rn" {
-                   pElemCount += 1
+            if elem == "Ar" || elem == "Rn" {
+                pElemCount += 1
             } else if elem == "Y" {
-                yElemCount += 1
+                cElemCount += 1
             }
             current = current!.next
         }
         
-        return molList.size - pElemCount - 2*yElemCount - 1
+        return molList.size - pElemCount - 2*cElemCount - 1
     }
 }
