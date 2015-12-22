@@ -31,6 +31,7 @@
 		99E427D01C12808000527174 /* Day2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E427CF1C12808000527174 /* Day2.swift */; };
 		99E427D21C12AA5200527174 /* Day3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E427D11C12AA5200527174 /* Day3.swift */; };
 		99E427D51C12B72800527174 /* Day4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E427D41C12B72800527174 /* Day4.swift */; };
+		99FA4EB81C28CC5200ACAA87 /* Day21.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FA4EB71C28CC5200ACAA87 /* Day21.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -85,6 +86,7 @@
 		99E427D31C12ABC400527174 /* advent2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent2.txt; sourceTree = "<group>"; };
 		99E427D41C12B72800527174 /* Day4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day4.swift; sourceTree = "<group>"; };
 		99E427D61C12C7D500527174 /* advent5.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = advent5.txt; sourceTree = "<group>"; };
+		99FA4EB71C28CC5200ACAA87 /* Day21.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Day21.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 				9955D0DF1C2506760006E265 /* Day18.swift */,
 				9955D0E41C25F4110006E265 /* Day19.swift */,
 				9955D0E71C2642A20006E265 /* Day20.swift */,
+				99FA4EB71C28CC5200ACAA87 /* Day21.swift */,
 				99630AF61C14DA0D00AEF67D /* DayBase.swift */,
 				99630AEE1C13906B00AEF67D /* Util.swift */,
 				99630AF21C13C3FB00AEF67D /* StringExtentions.swift */,
@@ -232,6 +235,7 @@
 				99630AEA1C135FE100AEF67D /* Day5.swift in Sources */,
 				9955D0E81C2642A20006E265 /* Day20.swift in Sources */,
 				995B4ABE1C226A6B002E8578 /* Day17.swift in Sources */,
+				99FA4EB81C28CC5200ACAA87 /* Day21.swift in Sources */,
 				99630B001C17F32C00AEF67D /* Day9.swift in Sources */,
 				99630B071C19DEB700AEF67D /* Day11.swift in Sources */,
 				99630AF71C14DA0D00AEF67D /* DayBase.swift in Sources */,
