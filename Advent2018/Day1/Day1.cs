@@ -65,7 +65,7 @@ namespace AdventOfCode2018
 
         public string[] Input { get; private set; }
 
-        public override int PuzzleDay { get { return 1; } }
+        public override int PuzzleDay => 1;
 
         protected override string Part1()
         {

@@ -10,7 +10,11 @@ namespace AdventOfCode2018
     {
         static void Main(string[] args)
         {
-            Day[] days = new Day[] { new Day1() };
+            Day[] days = new Day[] 
+                {
+                    //new Day1(),
+                    new Day2()
+                };
 
             Console.WriteLine("Starting solutions");
             foreach(Day day in days)
