@@ -47,7 +47,20 @@ namespace AdventOfCode2018
 
         protected override string Part1()
         {
-            return "unsolved";
+            int currentFreq = 0;
+            foreach(string freqStr in Input)
+            {
+                int freq;
+                if (int.TryParse(freqStr, out freq))
+                {
+                    currentFreq += freq;
+                }
+                else
+                {
+                    Console.WriteLine("uh oh");
+                }
+            }
+            return currentFreq.ToString();
         }
 
         protected override string Part2()
