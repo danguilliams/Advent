@@ -38,7 +38,7 @@ namespace AdventOfCode2018
             Console.WriteLine(part2);
         }
 
-        public object ReadInput(string fileName)
+        public string[] ReadInput(string fileName)
         {
             if (File.Exists(fileName))
             {
