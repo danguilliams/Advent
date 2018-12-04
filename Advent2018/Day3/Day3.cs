@@ -47,42 +47,122 @@ namespace AdventOfCode2018
      * The four square inches marked with X are claimed by both 1 and 2. (Claim 3, while adjacent to the others, does not overlap either of them.)
      * 
      * If the Elves all proceed with their own plans, none of them will have enough fabric. How many square inches of fabric are within two or more claims?
+     * 
+     * --- Part Two ---
+     * Amidst the chaos, you notice that exactly one claim doesn't overlap by even a single square inch of fabric with any other claim. If you can somehow draw attention to it, maybe the Elves will be able to make Santa's suit after all!
+     * 
+     * For example, in the claims above, only claim 3 is intact after all claims are made.
+     * 
+     * What is the ID of the only claim that doesn't overlap?
      */
     public class Day3 : Day
     {
         public Day3()
         {
             string[] input = (string[])ReadInput("Day3/Day3Input.txt");
-            
-
+            Claims = new List<Claim>(input.Length);
+            foreach(string str in input)
+            {
+                Claims.Add(new Claim(str));
+            }
+            FabricSize = 1000;
+            Fabric = new int[FabricSize, FabricSize];
         }
 
 
         public override int PuzzleDay => 3;
 
+        public int[,] Fabric { get; private set; }
+
+        public int FabricSize { get; private set; }
+
+        public IList<Claim> Claims { get; private set; }
+
         protected override string Part1()
         {
-            throw new NotImplementedException();
+            foreach(Claim c in Claims)
+            {
+                ApplyClaim(c);
+            }
+
+            int sum = 0;
+            for (int i = 0; i < FabricSize; i++)
+            {
+                for (int j = 0; j < FabricSize; j++)
+                {
+                    if (Fabric[i,j] > 1)
+                    {
+                        sum++;
+                    }
+                }
+            }
+            return sum.ToString();
         }
 
         protected override string Part2()
         {
-            throw new NotImplementedException();
+            // all claims are applied from part one.
+            // this time, instead of applying each claim, we check each claim after all have been applied.
+            // the claim whose values are all '1' is the claim with no overlaps.
+            Claim validClaim = null;
+            foreach(Claim c in Claims)
+            {
+                if(ValidateClaim(c))
+                {
+                    validClaim = c;
+                    break;
+                }
+            }
+
+            return validClaim != null ? validClaim.ID : "No valid claim found :(";
+        }
+
+        private void ApplyClaim(Claim c)
+        {
+            for(int i = c.Column; i < c.Column + c.Width; i++)
+            {
+                for(int j = c.Row; j < c.Row + c.Height; j++)
+                {
+                    Fabric[i, j] += 1;
+                }
+            }
+        }
+
+        private bool ValidateClaim(Claim c)
+        {
+            for (int i = c.Column; i < c.Column + c.Width; i++)
+            {
+                for (int j = c.Row; j < c.Row + c.Height; j++)
+                {
+                    if (Fabric[i, j] != 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         public class Claim
         {
             public Claim (string input)
             {
-
+                // input is formatted like so: 
+                // #1 @ 45,64: 22x22
+                // #id @ Col,Row: WxH
+                string[] tokens = input.Split('@', ',', ':', 'x');
+                ID = tokens[0];
+                Column = int.Parse(tokens[1]);
+                Row = int.Parse(tokens[2]);
+                Width = int.Parse(tokens[3]);
+                Height = int.Parse(tokens[4]);
             }
 
             public string ID { get; set; }
             public int Row { get; set; }
             public int Column { get; set; }
-
             public int Width { get; set; }
-
             public int Height { get; set; }
         }
     }
