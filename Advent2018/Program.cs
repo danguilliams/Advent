@@ -12,8 +12,9 @@ namespace AdventOfCode2018
         {
             Day[] days = new Day[] 
                 {
-                    //new Day1(),
-                    new Day2()
+                    new Day1(),
+                    new Day2(),
+                    new Day3(),
                 };
 
             Console.WriteLine("Starting solutions");
