@@ -25,16 +25,19 @@ namespace AdventOfCode2018
         public void Solve()
         {
             Timer.Start();
+            ProcessInput();
             string part1 = Part1();
             Timer.Stop();
             TimeSpan part1Time = Timer.Elapsed;
             Console.WriteLine($"Day{PuzzleDay}:Part 1 finished in {part1Time.ToString()} - solution:");
+            Console.Write("\t");
             Console.WriteLine(part1);
             Timer.Restart();
             string part2 = Part2();
             Timer.Stop();
             TimeSpan part2Time = Timer.Elapsed;
             Console.WriteLine($"Day{PuzzleDay}:Part 2 finished in {part1Time.ToString()} - solution:");
+            Console.Write("\t");
             Console.WriteLine(part2);
         }
 
@@ -48,6 +51,11 @@ namespace AdventOfCode2018
             {
                 throw new FileNotFoundException($"{fileName} was not found");
             }
+        }
+
+        protected virtual void ProcessInput()
+        {
+
         }
 
         protected abstract string Part1();

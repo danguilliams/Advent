@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,32 +57,101 @@ namespace AdventOfCode2018
      * While this example listed the entries in chronological order, your entries are in the order you found them. You'll need to organize them before they can be analyzed.
      * 
      * What is the ID of the guard you chose multiplied by the minute you chose? (In the above example, the answer would be 10 * 24 = 240.)
+     *      Strategy 2: Of all guards, which guard is most frequently asleep on the same minute?
+     * 
+     * In the example above, Guard #99 spent minute 45 asleep more than any other guard or minute - three times in total. (In all other cases, any guard spent any minute asleep at most twice.)
+     * 
+     * What is the ID of the guard you chose multiplied by the minute you chose? (In the above example, the answer would be 99 * 45 = 4455.)
      */
     public class Day4 : Day
     {
         public Day4()
         {
-            string[] input = ReadInput("Day4/Day4Input.txt");
-            IList<LogEntry> logs = new List<LogEntry>(input.Length);
-            foreach (string str in input)
+            Input = ReadInput("Day4/Day4Input.txt");
+            Guards = new Dictionary<int, GuardHistory>();
+        }
+
+        public override int PuzzleDay => 4;
+
+        private string[] Input { get; set; }
+
+        private Dictionary<int, GuardHistory> Guards {get; set;}
+
+        protected override string Part1()
+        {
+            // get the guard with the most sleep
+            GuardHistory sleepy = Guards.Values.OrderByDescending(g => g.NapData.Sum()).First();
+            int sleepiestMinute = GetSleepiestMinute(sleepy);
+            int solution = sleepy.Id * sleepiestMinute;
+            return $"Guard #{sleepy.Id} slept most, sleepiest minute: {sleepiestMinute} = {solution}";
+        }
+
+        protected override string Part2()
+        {
+            // get the guard who slept the most during any one minute
+            GuardHistory sleepy = Guards.Values.OrderByDescending(g => g.NapData.Max()).First();
+            int sleepiestMinute = GetSleepiestMinute(sleepy);
+            int solution = sleepy.Id * sleepiestMinute;
+            return $"Guard #{sleepy.Id} slept most during minute: {sleepiestMinute} = {solution}";
+        }
+
+        private int GetSleepiestMinute(GuardHistory g)
+        {
+            int sleepiestMinute = 0;
+            int sleepiestMinuteIdx = -1;
+            for (int i = 0; i < g.NapData.Length; i++)
+            {
+                if (g.NapData[i] > sleepiestMinute)
+                {
+                    sleepiestMinute = g.NapData[i];
+                    sleepiestMinuteIdx = i;
+                }
+            }
+
+            return sleepiestMinuteIdx;
+        }
+
+        protected override void ProcessInput()
+        {
+            IList<LogEntry> logs = new List<LogEntry>(Input.Length);
+            foreach (string str in Input)
             {
                 logs.Add(new LogEntry(str));
             }
 
             logs = logs.OrderBy(l => l.When).ToList();
 
-        }
-
-        public override int PuzzleDay => 4;
-
-        protected override string Part1()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override string Part2()
-        {
-            throw new NotImplementedException();
+            // if you want to see sorted input...
+            //File.WriteAllLines("Day4/Day4Sorted.txt", logs.Select(l => l.Original).ToArray());
+            
+            int currentGuard = 0;
+            int sleepIdx = 0;
+            // process log entries to form schedules
+            for (int i = 0; i < logs.Count; i++)
+            {
+                // Guard starting a new shift
+                if (logs[i].What.Length > 18)
+                {
+                    currentGuard = int.Parse(logs[i].What.Split(' ')[1].Replace('#', ' '));
+                    if (!Guards.ContainsKey(currentGuard))
+                    {
+                        Guards[currentGuard] = new GuardHistory(currentGuard);
+                    }
+                }
+                else if (logs[i].What.Length > 10)// guard falling asleep
+                {
+                    sleepIdx = i;
+                }
+                else // guard waking up, process the nap
+                {
+                    int napStart = logs[sleepIdx].When.Minute;
+                    int napEnd = logs[i].When.Minute;
+                    for (int j = napStart; j < napEnd; j++)
+                    {
+                        Guards[currentGuard].NapData[j]++;
+                    }
+                }
+            }
         }
 
         public class LogEntry
@@ -91,13 +161,29 @@ namespace AdventOfCode2018
                 // "[1518-09-09 00:04] Guard #1543 begins shift"
                 When = DateTime.Parse(input.Substring(1, 16).Replace("1518", "2018"));
                 What = input.Substring(18).Trim();
+                Original = input;
             }
 
             public DateTime When { get; private set; }
 
             public string What { get; private set; }
+
+            public string Original { get; private set; }
         }
 
+        public class GuardHistory
+        {
+            public GuardHistory(int id)
+            {
+                this.Id = id;
+                NapData = new int[60];
+            }
+
+            public int Id { get; set; }
+
+            public int[] NapData { get; private set; }
+
+        }
        
     }
 }
