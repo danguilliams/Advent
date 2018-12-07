@@ -55,6 +55,40 @@ namespace AdventOfCode2018
      * In this example, the areas of coordinates A, B, C, and F are infinite - while not shown here, their areas extend forever outside the visible grid. However, the areas of coordinates D and E are finite: D is closest to 9 locations, and E is closest to 17 (both including the coordinate's location itself). Therefore, in this example, the size of the largest area is 17.
      * 
      * What is the size of the largest area that isn't infinite?
+     * 
+     * --- Part Two ---
+     * On the other hand, if the coordinates are safe, maybe the best you can do is try to find a region near as many coordinates as possible.
+     * 
+     * For example, suppose you want the sum of the Manhattan distance to all of the coordinates to be less than 32. For each location, add up the distances to all of the given coordinates; if the total of those distances is less than 32, that location is within the desired region. Using the same coordinates as above, the resulting region looks like this:
+     * 
+     * ..........
+     * .A........
+     * ..........
+     * ...###..C.
+     * ..#D###...
+     * ..###E#...
+     * .B.###....
+     * ..........
+     * ..........
+     * ........F.
+     * In particular, consider the highlighted location 4,3 located at the top middle of the region. Its calculation is as follows, where abs() is the absolute value function:
+     * 
+     * Distance to coordinate A: abs(4-1) + abs(3-1) =  5
+     * Distance to coordinate B: abs(4-1) + abs(3-6) =  6
+     * Distance to coordinate C: abs(4-8) + abs(3-3) =  4
+     * Distance to coordinate D: abs(4-3) + abs(3-4) =  2
+     * Distance to coordinate E: abs(4-5) + abs(3-5) =  3
+     * Distance to coordinate F: abs(4-8) + abs(3-9) = 10
+     * Total distance: 5 + 6 + 4 + 2 + 3 + 10 = 30
+     * Because the total distance to all coordinates (30) is less than 32, the location is within the region.
+     * 
+     * This region, which also includes coordinates D and E, has a total size of 16.
+     * 
+     * Your actual region will need to be much larger than this example, though, instead including all locations with a total distance of less than 10000.
+     * 
+     * What is the size of the region containing all locations which have a total distance to all given coordinates of less than 10000?
+     * 
+     * Although it hasn't changed, you can still get your puzzle input.
      */
     public class Day6 : Day
     {
@@ -84,11 +118,13 @@ namespace AdventOfCode2018
         {
             int largestDim = Coords.Max(c => Math.Max(c.X, c.Y));
             int gridSize = largestDim + 2;
+            int[,] grid = new int[gridSize, gridSize];
             for(int x = 0; x < gridSize; x++)
             {
                 for (int y = 0; y < gridSize; y++)
                 {
                     int closestId = GetClosestCoordId(x, y);
+                    grid[x, y] = closestId;
                     if (closestId > 0)
                     {
                         Coord closest = Coords.First(c => c.Id == closestId);
@@ -101,10 +137,11 @@ namespace AdventOfCode2018
                 }
             }
 
-            Coord best = Coords.OrderByDescending(c => c.Count).First();
+            Coord best = Coords.OrderByDescending(c => c.Count).First(c => !c.Infinite);
 
             return $"Best point ID: {best.Id}, size {best.Count}";
         }
+
 
         private int GetClosestCoordId(int x, int y)
         {
@@ -112,11 +149,6 @@ namespace AdventOfCode2018
             int closestId = -1; // -1 = more than 1 Coord equidistant
             foreach(Coord c in Coords)
             {
-                if (c.X == x && c.Y == y)
-                {
-                    return -1;
-                }
-
                 int dist = GetManhattanDistance(x, y, c.X, c.Y);
                 if (dist < closestDistance)
                 {
@@ -125,22 +157,46 @@ namespace AdventOfCode2018
                 }
                 else if (dist == closestDistance)
                 {
-                    closestId = 0;
+                    closestId = -1;
                 }
             }
 
             return closestId;
         }
 
+        private int GetTotalCoordDistance(int x, int y)
+        {
+            int totalDistance = 0;
+            foreach(Coord c in Coords)
+            {
+                totalDistance += GetManhattanDistance(x, y, c.X, c.Y);
+            }
+
+            return totalDistance;
+        }
+
         private int GetManhattanDistance(int x1, int y1, int x2, int y2)
         {
             return Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
-
         }
 
         protected override string Part2()
         {
-            return "unsolved";
+            int largestDim = Coords.Max(c => Math.Max(c.X, c.Y));
+            int gridSize = largestDim + 2;
+            int safeAreaSize = 0;
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    if (GetTotalCoordDistance(x,y) < 10000)
+                    {
+                        safeAreaSize++;
+                    }
+                }
+            }
+
+            return $"Total safe area size: {safeAreaSize}";
         }
 
         public class Coord
