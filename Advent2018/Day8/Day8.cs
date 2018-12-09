@@ -76,7 +76,6 @@ namespace AdventOfCode2018
             var vals = Vals.GetEnumerator();
             vals.MoveNext();
             Root = ProcessNode(vals, null);
-            strId = "A";
         }
 
         private Node ProcessNode(IEnumerator<int> vals, Node parent)
@@ -105,11 +104,6 @@ namespace AdventOfCode2018
             return (curId++).ToString();
         }
 
-        private char NextLetter(int id)
-        {
-            return (char)((id % 26) + 'A');
-        }
-
         private void Traverse(Node node, Action<Node> toDo)
         {
             toDo(node);
@@ -122,14 +116,40 @@ namespace AdventOfCode2018
         protected override string Part1()
         {
             int sum = 0;
-            Traverse(Root, n => sum += n.Metadata.Sum());
+            Traverse(Root, n =>
+            {
+                n.Value = n.Metadata.Sum();
+                sum += n.Value;
+            });
+
             return $"Total metadata sum: {sum}";
         }
 
         protected override string Part2()
         {
+            int value = GetNodeValue(Root);
 
-            return "unfinished";
+            return $"Root node value: {value}";
+        }
+
+        private int GetNodeValue(Node n)
+        {
+            if(n.Children.Length == 0)
+            {
+                return n.Metadata.Sum();
+            }
+            else
+            {
+                int sum = 0;
+                foreach(int idx in n.Metadata)
+                {
+                    if(idx <= n.Children.Length)
+                    {
+                        sum += GetNodeValue(n.Children[idx - 1]);
+                    }
+                }
+                return sum;
+            }
         }
 
         [DebuggerDisplay("{Id}")]
@@ -147,6 +167,8 @@ namespace AdventOfCode2018
             public Node[] Children { get; private set; }
             public Node Parent { get; private set; }
             public string Id { get; private set; }
+            public int Value { get; set; }
+
         }
 
     }
