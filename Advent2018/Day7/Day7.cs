@@ -158,7 +158,67 @@ namespace AdventOfCode2018
 
         protected override string Part2()
         {
-            return "unsolved";
+            Steps.ForEach(s => s.Reset());
+            int candidates = Steps.Count(s => s.PreviousSteps.Count == 0);
+
+            SortedSet<Step> candidateSteps = new SortedSet<Step>(new StepComparer());
+            Queue<Step> stepOrder = new Queue<Step>(Steps.Count);
+            Step[] workers = new Step[5];
+
+            foreach (Step s in Steps.Where(s => s.PreviousSteps.Count == 0))
+            {
+                candidateSteps.Add(s);
+            }
+
+            int seconds = 0;
+            // next step will be the first one alphabetically that hasn't already been done but has all previous steps finished
+            while (Steps.Any(s => !s.Finished))
+            {
+                string currentWork = "\t";
+                for(int i = 0; i < 5; i++)
+                {
+                    // assign worker next available task
+                    if(workers[i] == null)
+                    {
+                        workers[i] = candidateSteps.FirstOrDefault(s => !s.Started && s.PreviousSteps.All(st => st.Finished));
+                    }
+                    
+                    // do work on each step
+                    if(workers[i] != null)
+                    {
+                        currentWork += workers[i].Id;
+                        workers[i].Started = true;
+                        workers[i].WorkLeft--;
+                        if(workers[i].WorkLeft == 0)
+                        {
+                            workers[i].Finished = true;
+                            stepOrder.Enqueue(workers[i]);
+                            foreach (Step s in workers[i].NextSteps)
+                            {
+                                candidateSteps.Add(s);
+                            }
+                            workers[i] = null;
+                        }
+                    }
+                    else
+                    {
+                        currentWork += ".";
+                    }
+                }
+                Console.WriteLine(currentWork);
+                seconds++;
+            }
+
+            string order = string.Empty;
+            foreach (Step s in stepOrder)
+            {
+                order += s.Id;
+            }
+
+            // incorrect: 884,885 (too low), 896 (too high)
+            // 
+            string result = $"Seconds needed: {seconds}, Completion Order {order}";
+            return result;
         }
 
         [DebuggerDisplay("{Id}")]
@@ -169,13 +229,23 @@ namespace AdventOfCode2018
                 Id = id;
                 NextSteps = new List<Step>();
                 PreviousSteps = new List<Step>();
-                Finished = false;
+                Reset();
             }
 
             public string Id { get; private set; }
             public bool Finished { get; set; }
+
+            public bool Started { get; set; }
+
+            public int WorkLeft { get; set; }
             public List<Step> PreviousSteps { get; private set; }
             public List<Step> NextSteps { get; private set; }
+            public void Reset()
+            {
+                Finished = false;
+                Started = false;
+                WorkLeft = 60 + (Id[0] - 'A') + 1;
+            }
         }
 
         public class StepComparer : IComparer<Step>
