@@ -175,19 +175,22 @@ namespace AdventOfCode2018
             while (Steps.Any(s => !s.Finished))
             {
                 string currentWork = "\t";
-                for(int i = 0; i < 5; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     // assign worker next available task
-                    if(workers[i] == null)
+                    if (workers[i] == null)
                     {
                         workers[i] = candidateSteps.FirstOrDefault(s => !s.Started && s.PreviousSteps.All(st => st.Finished));
+                        if(workers[i] != null) workers[i].Started = true;
                     }
-                    
+                }
+
+                for (int i = 0; i < 5; i++)
+                { 
                     // do work on each step
-                    if(workers[i] != null)
+                    if (workers[i] != null)
                     {
                         currentWork += workers[i].Id;
-                        workers[i].Started = true;
                         workers[i].WorkLeft--;
                         if(workers[i].WorkLeft == 0)
                         {
@@ -215,8 +218,9 @@ namespace AdventOfCode2018
                 order += s.Id;
             }
 
-            // incorrect: 884,885 (too low), 896 (too high)
-            // 
+            // incorrect: 884,885 (too low, workers starting things same second as previous steps were finished), 
+            //            896 (too high, 1 too many seconds per step)
+            
             string result = $"Seconds needed: {seconds}, Completion Order {order}";
             return result;
         }
@@ -234,9 +238,7 @@ namespace AdventOfCode2018
 
             public string Id { get; private set; }
             public bool Finished { get; set; }
-
             public bool Started { get; set; }
-
             public int WorkLeft { get; set; }
             public List<Step> PreviousSteps { get; private set; }
             public List<Step> NextSteps { get; private set; }
