@@ -162,6 +162,8 @@ namespace AdventOfCode2018
 
         private List<Light> Lights { get; set; }
 
+        private int OptimalSeconds { get; set; }
+
         protected override void ProcessInput()
         {
             foreach(string s in Input)
@@ -170,19 +172,17 @@ namespace AdventOfCode2018
                 string[] t = s.Split('<', ',', '>');
                 Lights.Add(new Light(t[1], t[2], t[4], t[5]));
             }
-        }
-        protected override string Part1()
-        {
+
             int minXRange = int.MaxValue;
             int minYRange = int.MaxValue;
             int minXIter = 0;
             int minYIter = 0;
             for (int i = 0; i < 12000; i++)
             {
-                Lights.ForEach(l => l.SetPosAfterMoves(i));
+                Lights.ForEach(l => l.SetPosAfterSeconds(i));
                 int xRange = Lights.Max(l => l.X) - Lights.Min(l => l.X);
                 int yRange = Lights.Max(l => l.Y) - Lights.Min(l => l.Y);
-                if(xRange < minXRange)
+                if (xRange < minXRange)
                 {
                     minXRange = xRange;
                     minXIter = i;
@@ -195,14 +195,22 @@ namespace AdventOfCode2018
                 }
             }
 
-            string result = PrintLights(minXIter);
+            OptimalSeconds = minXIter;
 
-            return result;
+        }
+        protected override string Part1()
+        {
+            return PrintLights(OptimalSeconds); ;
         }
 
-        private string PrintLights(int iteration)
+        protected override string Part2()
         {
-            Lights.ForEach(l => l.SetPosAfterMoves(iteration));
+            return $"Message appears after {OptimalSeconds} seconds";
+        }
+
+        private string PrintLights(int seconds)
+        {
+            Lights.ForEach(l => l.SetPosAfterSeconds(seconds));
 
             int minX = Lights.Min(l => l.X);
             int minY = Lights.Min(l => l.Y);
@@ -239,10 +247,7 @@ namespace AdventOfCode2018
         }
 
         
-        protected override string Part2()
-        {
-            return "unfinished";
-        }
+
 
         public class Light
         {
@@ -265,7 +270,7 @@ namespace AdventOfCode2018
             private int StartX { get; set; }
             private int StartY { get; set; }
 
-            public void SetPosAfterMoves(int moves)
+            public void SetPosAfterSeconds(int moves)
             {
                 X = StartX + moves * dX;
                 Y = StartY + moves * dY;
