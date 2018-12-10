@@ -174,7 +174,6 @@ namespace AdventOfCode2018
             // next step will be the first one alphabetically that hasn't already been done but has all previous steps finished
             while (Steps.Any(s => !s.Finished))
             {
-                string currentWork = "\t";
                 for (int i = 0; i < 5; i++)
                 {
                     // assign worker next available task
@@ -190,7 +189,6 @@ namespace AdventOfCode2018
                     // do work on each step
                     if (workers[i] != null)
                     {
-                        currentWork += workers[i].Id;
                         workers[i].WorkLeft--;
                         if(workers[i].WorkLeft == 0)
                         {
@@ -203,12 +201,8 @@ namespace AdventOfCode2018
                             workers[i] = null;
                         }
                     }
-                    else
-                    {
-                        currentWork += ".";
-                    }
+
                 }
-                Console.WriteLine(currentWork);
                 seconds++;
             }
 

@@ -24,21 +24,39 @@ namespace AdventOfCode2018
 
         public void Solve()
         {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("Day [");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(PuzzleDay);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("]");
             Timer.Start();
             ProcessInput();
             string part1 = Part1();
             Timer.Stop();
-            TimeSpan part1Time = Timer.Elapsed;
-            Console.WriteLine($"Day{PuzzleDay}:Part 1 finished in {part1Time.ToString()} - solution:");
-            Console.Write("\t");
-            Console.WriteLine(part1);
+            WritePartResults(1, Timer.Elapsed, part1);
             Timer.Restart();
             string part2 = Part2();
             Timer.Stop();
-            TimeSpan part2Time = Timer.Elapsed;
-            Console.WriteLine($"Day{PuzzleDay}:Part 2 finished in {part1Time.ToString()} - solution:");
+            WritePartResults(2, Timer.Elapsed, part2);
+            Console.WriteLine();
+        }
+
+        private void WritePartResults(int partNum, TimeSpan duration, string solution)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($" Pt ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(partNum);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($" took ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(duration.TotalMilliseconds);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(" ms:");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.Write("\t");
-            Console.WriteLine(part2);
+            Console.WriteLine(solution);
         }
 
         public string[] ReadInput(string fileName)
