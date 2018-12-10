@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -61,9 +59,7 @@ namespace AdventOfCode2018
     {
         public Day8()
         {
-            string input = ReadInput("Day08/Day8Input.txt")[0];
             Vals = new List<int>();
-            Vals.AddRange(input.Split(' ').Select(i => int.Parse(i)));
         }
 
         public List<int> Vals { get; private set; }
@@ -73,6 +69,7 @@ namespace AdventOfCode2018
 
         protected override void ProcessInput()
         {
+            Vals.AddRange(Input[0].Split(' ').Select(i => int.Parse(i)));
             var vals = Vals.GetEnumerator();
             vals.MoveNext();
             Root = ProcessNode(vals, null);

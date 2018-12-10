@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -82,7 +79,6 @@ namespace AdventOfCode2018
     {
         public Day7()
         {
-            input = ReadInput("Day07/Day7Input.txt");
             Steps = new List<Step>();
         }
 
@@ -100,13 +96,11 @@ namespace AdventOfCode2018
         
         public override int PuzzleDay => 7;
 
-        private string[] input;
-
         public List<Step> Steps { get; private set; }
 
         protected override void ProcessInput()
         {
-            foreach (string str in input)
+            foreach (string str in Input)
             {
                 string[] tokens = str.Split(' ');
                 string previousId = tokens[1];

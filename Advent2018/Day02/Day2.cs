@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -50,14 +47,7 @@ namespace AdventOfCode2018
      */
     public class Day2 : Day
     {
-        public Day2()
-        {
-            Input = (string[])ReadInput("Day02/Day2Input.txt");
-        }
-
         public override int PuzzleDay => 2;
-
-        public string[] Input { get; private set; }
 
         protected override string Part1()
         {

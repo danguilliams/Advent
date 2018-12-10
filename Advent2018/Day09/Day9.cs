@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -64,10 +60,6 @@ namespace AdventOfCode2018
      */
     public class Day9 : Day
     {
-        public Day9() { 
-            
-        }
-
         public override int PuzzleDay => 9;
 
         public int Players => 459;

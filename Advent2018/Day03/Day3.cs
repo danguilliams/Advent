@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AdventOfCode2018
 {
@@ -59,16 +55,14 @@ namespace AdventOfCode2018
     {
         public Day3()
         {
-            string[] input = (string[])ReadInput("Day03/Day3Input.txt");
-            Claims = new List<Claim>(input.Length);
-            foreach(string str in input)
+            Claims = new List<Claim>(Input.Length);
+            foreach(string str in Input)
             {
                 Claims.Add(new Claim(str));
             }
             FabricSize = 1000;
             Fabric = new int[FabricSize, FabricSize];
         }
-
 
         public override int PuzzleDay => 3;
 

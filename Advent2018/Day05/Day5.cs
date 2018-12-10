@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -51,14 +48,9 @@ namespace AdventOfCode2018
      */
     public class Day5 : Day
     {
-        public Day5()
-        {
-            Polymer = ReadInput("Day05/Day5Input.txt")[0];
-        }
-
         public override int PuzzleDay => 5;
 
-        public string Polymer { get; private set; }
+        public string Polymer => Input[0];
 
         protected override string Part1()
         {
@@ -72,7 +64,7 @@ namespace AdventOfCode2018
             string chars = "abcdefghijklmnopqrstuvwxyz";
             foreach(char c in chars)
             {
-                string subbed = Polymer.Replace(c.ToString(), "").Replace(Char.ToUpper(c).ToString(), "");
+                string subbed = Polymer.Replace(c.ToString(), "").Replace(char.ToUpper(c).ToString(), "");
                 string reduced = Reduce(subbed);
                 charToLength[c] = reduced.Length;
             }
@@ -103,7 +95,7 @@ namespace AdventOfCode2018
                 else
                 {
                     char b = reduced.Peek();
-                    if(b != c && Char.ToUpper(b) == Char.ToUpper(c))
+                    if(b != c && char.ToUpper(b) == char.ToUpper(c))
                     {
                         reduced.Pop();
                     }

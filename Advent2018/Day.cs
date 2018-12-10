@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -16,7 +12,10 @@ namespace AdventOfCode2018
         public Day()
         {
             Timer = new Stopwatch();
+            Input = ReadInput($"Day{(PuzzleDay > 9 ? PuzzleDay.ToString() : "0" + PuzzleDay.ToString())}/Day{PuzzleDay}Input.txt");
         }
+
+        protected string[] Input { get; set; }
 
         private Stopwatch Timer { get; set; }
 

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -152,13 +149,10 @@ namespace AdventOfCode2018
     {
         public Day10()
         {
-            Input = ReadInput("Day10/Day10Input.txt");
             Lights = new List<Light>();
         }
 
         public override int PuzzleDay => 10;
-
-        private string[] Input { get; set; }
 
         private List<Light> Lights { get; set; }
 
@@ -245,9 +239,6 @@ namespace AdventOfCode2018
 
             return result;
         }
-
-        
-
 
         public class Light
         {

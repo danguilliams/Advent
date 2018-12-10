@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -94,13 +92,10 @@ namespace AdventOfCode2018
     {
         public Day6()
         {
-            Input = ReadInput("Day06/Day6Input.txt");
             Coords = new List<Coord>(Input.Length);
         }
 
         public IList<Coord> Coords { get; private set; }
-
-        private string[] Input { get; set; }
 
         public override int PuzzleDay => 6;
 

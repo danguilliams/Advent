@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -25,6 +21,21 @@ namespace AdventOfCode2018
                     new Day10(),
                 };
 
+            WriteIntro(days);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            foreach (Day day in days)
+            {
+                day.Solve();
+            }
+            sw.Stop();
+            WriteOutro(sw.Elapsed);
+            Console.WriteLine("Press any key to exit");
+            Console.ReadKey();
+        }
+
+        private static void WriteIntro(Day[] days)
+        {
             WriteBaubles(10, false);
             WriteBaubles(10);
             Console.WriteLine();
@@ -46,23 +57,18 @@ namespace AdventOfCode2018
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("]");
             Console.WriteLine();
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            foreach (Day day in days)
-            {
-                day.Solve();
-            }
-            sw.Stop();
+        }
+
+        private static void WriteOutro(TimeSpan elapsed)
+        {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("Finished in");
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write($" {sw.Elapsed.TotalSeconds} ");
+            Console.Write($" {elapsed.TotalSeconds} ");
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("s");
             Console.WriteLine();
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey();
         }
 
         private static void WriteBaubles(int count, bool left = true)
