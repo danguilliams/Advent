@@ -53,6 +53,7 @@
     <Compile Include="Day07\Day7.cs" />
     <Compile Include="Day08\Day8.cs" />
     <Compile Include="Day09\Day9.cs" />
+    <Compile Include="Day10\Day10.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -85,9 +86,10 @@
     <Content Include="Day08\Day8Input.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Day10\Day10Input.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Day10\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -13,15 +13,16 @@ namespace AdventOfCode2018
         {
             Day[] days = new Day[]
                 {
-                    new Day1(),
-                    new Day2(),
-                    new Day3(),
-                    new Day4(),
-                    new Day5(),
-                    new Day6(),
-                    new Day7(),
-                    new Day8(),
-                    new Day9(),
+                    //new Day1(),
+                    //new Day2(),
+                    //new Day3(),
+                    //new Day4(),
+                    //new Day5(),
+                    //new Day6(),
+                    //new Day7(),
+                    //new Day8(),
+                    //new Day9(),
+                    new Day10(),
                 };
 
             WriteBaubles(10, false);
@@ -66,8 +67,8 @@ namespace AdventOfCode2018
 
         private static void WriteBaubles(int count, bool left = true)
         {
-            ConsoleColor[] colors = new ConsoleColor[] { ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Magenta, ConsoleColor.Blue };
-            string baubles = "@oO*&";
+            ConsoleColor[] colors = new ConsoleColor[] { ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Magenta, ConsoleColor.Blue, ConsoleColor.Cyan, ConsoleColor.White };
+            string baubles = "@oO*&QS";
 
             int baubleIdx = DateTime.Now.Millisecond % baubles.Length;
             int colorIdx = DateTime.Now.Millisecond % colors.Length;
