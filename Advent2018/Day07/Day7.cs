@@ -82,7 +82,7 @@ namespace AdventOfCode2018
     {
         public Day7()
         {
-            input = ReadInput("Day7/Day7Input.txt");
+            input = ReadInput("Day07/Day7Input.txt");
             Steps = new List<Step>();
         }
 

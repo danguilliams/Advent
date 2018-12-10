@@ -60,7 +60,7 @@ namespace AdventOfCode2018
     {
         public Day1()
         {
-            Input = (string[])ReadInput("Day1/Day1Input.txt");
+            Input = (string[])ReadInput("Day01/Day1Input.txt");
         }
 
         public string[] Input { get; private set; }

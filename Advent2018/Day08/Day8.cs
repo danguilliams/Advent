@@ -61,7 +61,7 @@ namespace AdventOfCode2018
     {
         public Day8()
         {
-            string input = ReadInput("Day8/Day8Input.txt")[0];
+            string input = ReadInput("Day08/Day8Input.txt")[0];
             Vals = new List<int>();
             Vals.AddRange(input.Split(' ').Select(i => int.Parse(i)));
         }

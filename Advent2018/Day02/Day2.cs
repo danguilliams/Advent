@@ -52,7 +52,7 @@ namespace AdventOfCode2018
     {
         public Day2()
         {
-            Input = (string[])ReadInput("Day2/Day2Input.txt");
+            Input = (string[])ReadInput("Day02/Day2Input.txt");
         }
 
         public override int PuzzleDay => 2;

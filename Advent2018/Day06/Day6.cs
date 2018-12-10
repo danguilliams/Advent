@@ -94,7 +94,7 @@ namespace AdventOfCode2018
     {
         public Day6()
         {
-            Input = ReadInput("Day6/Day6Input.txt");
+            Input = ReadInput("Day06/Day6Input.txt");
             Coords = new List<Coord>(Input.Length);
         }
 

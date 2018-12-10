@@ -53,7 +53,7 @@ namespace AdventOfCode2018
     {
         public Day5()
         {
-            Polymer = ReadInput("Day5/Day5Input.txt")[0];
+            Polymer = ReadInput("Day05/Day5Input.txt")[0];
         }
 
         public override int PuzzleDay => 5;

@@ -59,7 +59,7 @@ namespace AdventOfCode2018
     {
         public Day3()
         {
-            string[] input = (string[])ReadInput("Day3/Day3Input.txt");
+            string[] input = (string[])ReadInput("Day03/Day3Input.txt");
             Claims = new List<Claim>(input.Length);
             foreach(string str in input)
             {

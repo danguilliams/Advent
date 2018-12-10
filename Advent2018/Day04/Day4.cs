@@ -67,7 +67,7 @@ namespace AdventOfCode2018
     {
         public Day4()
         {
-            Input = ReadInput("Day4/Day4Input.txt");
+            Input = ReadInput("Day04/Day4Input.txt");
             Guards = new Dictionary<int, GuardHistory>();
         }
 
