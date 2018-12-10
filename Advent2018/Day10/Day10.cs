@@ -173,20 +173,75 @@ namespace AdventOfCode2018
         }
         protected override string Part1()
         {
-            for (int i = 0; i < 100; i++)
+            int minXRange = int.MaxValue;
+            int minYRange = int.MaxValue;
+            int minXIter = 0;
+            int minYIter = 0;
+            for (int i = 0; i < 12000; i++)
             {
+                Lights.ForEach(l => l.SetPosAfterMoves(i));
                 int xRange = Lights.Max(l => l.X) - Lights.Min(l => l.X);
                 int yRange = Lights.Max(l => l.Y) - Lights.Min(l => l.Y);
-                Console.WriteLine($"[{i}] X range: {xRange} Y range: {yRange}");
-                Lights.ForEach(l => l.Move());
+                if(xRange < minXRange)
+                {
+                    minXRange = xRange;
+                    minXIter = i;
+                }
+
+                if (yRange < minYRange)
+                {
+                    minYRange = yRange;
+                    minYIter = i;
+                }
             }
 
-            return "uhh";
+            string result = PrintLights(minXIter);
+
+            return result;
         }
 
+        private string PrintLights(int iteration)
+        {
+            Lights.ForEach(l => l.SetPosAfterMoves(iteration));
+
+            int minX = Lights.Min(l => l.X);
+            int minY = Lights.Min(l => l.Y);
+            int maxX = Lights.Max(l => l.X);
+            int maxY = Lights.Max(l => l.Y);
+            int xRange = maxX - minX + 1;
+            int yRange = maxY - minY + 1;
+            char[,] grid = new char[xRange, yRange];
+            for (int i = 0; i < xRange; i++)
+            {
+                for (int j = 0; j < yRange; j++)
+                {
+                    grid[i, j] = '.';
+                }
+            }
+
+            foreach(Light l in Lights)
+            {
+                grid[l.X - minX, l.Y - minY] = '#';
+            }
+
+            string result = "\n";
+            for (int i = 0; i < yRange; i++)
+            {
+                string line = "   ";
+                for (int j = 0; j < xRange; j++)
+                {
+                    line += grid[j, i];
+                }
+                result += line + "\n";
+            }
+
+            return result;
+        }
+
+        
         protected override string Part2()
         {
-            throw new NotImplementedException();
+            return "unfinished";
         }
 
         public class Light
@@ -195,19 +250,25 @@ namespace AdventOfCode2018
             {
                 X = int.Parse(x);
                 Y = int.Parse(y);
+                StartX = X;
+                StartY = Y;
                 dX = int.Parse(dx);
                 dY = int.Parse(dy);
             }
 
             public int X { get; private set; }
             public int Y { get; private set; }
+
             public int dX { get; private set; }
             public int dY { get; private set; }
 
-            public void Move()
+            private int StartX { get; set; }
+            private int StartY { get; set; }
+
+            public void SetPosAfterMoves(int moves)
             {
-                X += dX;
-                Y += dY;
+                X = StartX + moves * dX;
+                Y = StartY + moves * dY;
             }
         }
 
