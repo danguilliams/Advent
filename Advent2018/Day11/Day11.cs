@@ -16,24 +16,24 @@
 
         public int GridSize = 300;
 
+        private int[,] Grid;
+
         protected override void ProcessInput()
         {
+            int arrSize = GridSize + 1;
+            Grid = new int[arrSize, arrSize];
 
+            for (int y = 1; y < arrSize; y++)
+            {
+                for (int x = 1; x < arrSize; x++)
+                {
+                    Grid[x, y] = GetPowerLevel(x, y);
+                }
+            }
         }
 
         protected override string Part1()
         {
-            int arrSize = GridSize + 1;
-            int[,] grid = new int[arrSize, arrSize];
-
-            for(int y = 1; y < arrSize; y++)
-            {
-                for (int x = 1; x < arrSize ; x++)
-                {
-                    grid[x, y] = GetPowerLevel(x, y);
-                }
-            }
-
             int maxPower = int.MinValue;
             int maxX = 0;
             int maxY = 0;
@@ -41,11 +41,8 @@
             {
                 for(int x = 1; x <= GridSize - 2; x++)
                 {
-                     int power =  grid[x, y] +     grid[x + 1, y] +     grid[x + 2, y] +
-                                  grid[x, y + 1] + grid[x + 1, y + 1] + grid[x + 2, y + 1] +
-                                  grid[x, y + 2] + grid[x + 1, y + 2] + grid[x + 2, y + 2];
-
-                    if(power > maxPower)
+                    int power = GetTotalPower(x, y, 3);
+                    if (power > maxPower)
                     {
                         maxPower = power;
                         maxX = x;
@@ -57,6 +54,47 @@
             // incorrect: [28,1] - was calculating cell rack id  wrong (multiplying instead of adding)
 
             return $"Max Power: {maxPower} at [{maxX},{maxY}]";
+        }
+
+        protected override string Part2()
+        {
+            int maxPower = int.MinValue;
+            int maxX = 0;
+            int maxY = 0;
+            int bestSize = 0;
+
+            for (int size = 1; size < GridSize; size++)
+            {
+                for (int y = 1; y <= GridSize - size; y++)
+                {
+                    for (int x = 1; x <= GridSize - size; x++)
+                    {
+                        int power = GetTotalPower(x, y, size);
+                        if (power > maxPower)
+                        {
+                            maxPower = power;
+                            maxX = x;
+                            maxY = y;
+                            bestSize = size;
+                        }
+                    }
+                }
+            }
+
+            return $"Max Power: {maxPower} at [{maxX},{maxY}] with size {bestSize}";
+        }
+
+        private int GetTotalPower(int x, int y, int size)
+        {
+            int sum = 0;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    sum += Grid[x + i, y + j];
+                }
+            }
+            return sum;
         }
 
         private int GetPowerLevel(int x, int y)
@@ -92,9 +130,6 @@
             return power;
         }
 
-        protected override string Part2()
-        {
-            return "Unfinished";
-        }
+
     }
 }
