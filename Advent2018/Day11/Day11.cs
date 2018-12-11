@@ -12,7 +12,7 @@
 
         public override int PuzzleDay => 11;
 
-        public int GridSerialNumber => 18;//1723;
+        public int GridSerialNumber => 1723;
 
         public int GridSize = 300;
 
@@ -54,6 +54,8 @@
                 }
             }
 
+            // incorrect: [28,1] - was calculating cell rack id  wrong (multiplying instead of adding)
+
             return $"Max Power: {maxPower} at [{maxX},{maxY}]";
         }
 
@@ -69,7 +71,8 @@
              * Keep only the hundreds digit of the power level (so 12345 becomes 3; numbers with no hundreds digit become 0).
              * Subtract 5 from the power level.
              */
-            int rackId = x * 10;
+
+            int rackId = x + 10;
             int power = rackId * y;
             power = power + GridSerialNumber;
             power = power * rackId;
