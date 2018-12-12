@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,10 +79,13 @@ namespace AdventOfCode2018
 
         public List<Plat> Plats { get; private set; }
 
-        public List<bool[]> Plants { get; private set; }
+        public int Index0 = 3;
 
-        public int Current { get; set; }
-        public int Next { get; set; }
+        public bool[] Plants1 { get; private set; }
+        public bool[] Plants2 { get; private set; }
+
+        public bool[] Current { get; set; }
+        public bool[] Next { get; set; }
 
         public int Generations => 20;
 
@@ -106,33 +110,40 @@ namespace AdventOfCode2018
 
             string state = input.Split(':')[1].Trim();
             int plantCount = state.Length + Generations * 2;
-            Plants = new List<bool[]>();
-            Plants.Add(new bool[plantCount]);
-            Plants.Add(new bool[plantCount]);
-
+            Plants1 = new bool[plantCount];
+            Plants2 = new bool[plantCount];
+            Current = Plants1;
+            Next = Plants2;
             for (int i = 0; i < state.Length; i++)
             {
                 if (state[i] == '#')
-                    Plants[0][i + Generations] = true;
+                    Current[i + Generations] = true;
             }
+        }
 
-            Current = 0;
-            Next = 1;
+        private void SwapCurrentPlants()
+        {
+            bool[] tmp = Current;
+            Current = Next;
+            Next = tmp;
         }
 
         protected override string Part1()
         {
-            for(int gen = 0; gen < Generations; gen++)
+            for (int gen = 0; gen < Generations; gen++)
             {
-                for(int plant = 2; plant < Plants[Current].Length - 2; plant++)
+                //Console.WriteLine($"after {gen} gens:");
+                //Console.WriteLine(GetPlantStr(Current));
+                for (int plant = 2; plant < Current.Length - 2; plant++)
                 {
-                    bool foundMatch = false;
                     foreach (Plat p in Plats)
                     {
                         bool match = true;
                         for (int i = 0; i < 5; i++)
                         {
-                            if (p.Pattern[i] != Plants[Current][plant + i - 2])
+                            bool p1 = p.Pattern[i];
+                            bool p2 = Current[plant + i - 2];
+                            if (p.Pattern[i] != Current[plant + i - 2])
                             {
                                 match = false;
                                 break;
@@ -141,30 +152,30 @@ namespace AdventOfCode2018
                         
                         if (match)
                         {
-                            Plants[Next][plant] = p.Result;
-                            foundMatch = true;
+                            Next[plant] = p.Result;
                             break;
                         }
                     }
-
-                    if (!foundMatch)
-                    {
-                        Console.WriteLine("uh oh");
-                    }
                 }
-
-                if(gen + 1 != Generations)
-                {
-                    Current = Math.Abs(Current - 1);
-                    Next = Math.Abs(Next - 1);
-                }
+                SwapCurrentPlants();
             }
 
-            //58 is wrong
+            //Console.WriteLine($"after {Generations} gens:");
+            //Console.WriteLine(GetPlantStr(Current));
 
-            int plantCount = Plants[Current].Count(p => p == true);
 
-            return $"Plant count {plantCount}";
+            int sum = 0;
+            for (int i = 0; i < Current.Length; i++)
+            {
+                if (Current[i])
+                    sum += i - Generations;
+            }
+
+            // 58 is wrong (was only counting # of plants, not summing indicies)
+            // 2904 is wrong (too low, set up initial state wrong)
+            // 2930 correct
+
+            return $"Pot ID sum: {sum}";
         }
 
         protected override string Part2()
@@ -172,21 +183,38 @@ namespace AdventOfCode2018
             return "unfinished";
         }
 
+        private string GetPlantStr(bool[] arr)
+        {
+            string s = string.Empty;
+            foreach(bool b in arr)
+            {
+                if (b) s += '#';
+                else s += '.';
+
+            }
+            return s;
+        }
+
+        [DebuggerDisplay("{PatternStr}")]
         public class Plat
         {
             public Plat(string plat)
             {
                 Pattern = new bool[5];
-                for(int i = 0; i < 5; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     if (plat[i] == '#') Pattern[i] = true;
                 }
 
                 if (plat[9] == '#') Result = true;
+
+                PatternStr = plat;
             }
 
             public bool[] Pattern { get; private set; }
             public bool Result { get; private set; }
+
+            public string PatternStr { get; private set; }
         }
 
 
