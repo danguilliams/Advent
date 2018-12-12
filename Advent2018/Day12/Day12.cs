@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -72,6 +70,10 @@ namespace AdventOfCode2018
      * In this example, after 20 generations, the pots shown as # contain plants, the furthest left of which is pot -2, and the furthest right of which is pot 34. Adding up all the numbers of plant-containing pots after the 20th generation produces 325.
      * 
      * After 20 generations, what is the sum of the numbers of all pots which contain a plant?
+     * --- Part Two ---
+     * You realize that 20 generations aren't enough. After all, these plants will need to last another 1500 years to even reach your timeline, not to mention your future.
+     * 
+     * After fifty billion (50000000000) generations, what is the sum of the numbers of all pots which contain a plant?
      */
     public class Day12 : Day
     {
@@ -79,15 +81,10 @@ namespace AdventOfCode2018
 
         public List<Plat> Plats { get; private set; }
 
-        public int Index0 = 3;
-
-        public bool[] Plants1 { get; private set; }
-        public bool[] Plants2 { get; private set; }
+        private int Plant0Idx { get; set; }
 
         public bool[] Current { get; set; }
         public bool[] Next { get; set; }
-
-        public int Generations => 20;
 
         protected override void ProcessInput()
         {
@@ -109,15 +106,15 @@ namespace AdventOfCode2018
             // initial state: ##.##.##..#..#.#.#.#...#...#####.###...#####.##..#####.#..#.##..#..#.#...#...##.##...#.##......####.
 
             string state = input.Split(':')[1].Trim();
-            int plantCount = state.Length + Generations * 2;
-            Plants1 = new bool[plantCount];
-            Plants2 = new bool[plantCount];
-            Current = Plants1;
-            Next = Plants2;
+            int plantCount = state.Length + 5;
+            Plant0Idx = 3;
+            Current = new bool[plantCount];
+            Next = new bool[plantCount];
+
             for (int i = 0; i < state.Length; i++)
             {
                 if (state[i] == '#')
-                    Current[i + Generations] = true;
+                    Current[i + Plant0Idx] = true;
             }
         }
 
@@ -130,45 +127,17 @@ namespace AdventOfCode2018
 
         protected override string Part1()
         {
+            int Generations = 20;
             for (int gen = 0; gen < Generations; gen++)
             {
-                //Console.WriteLine($"after {gen} gens:");
-                //Console.WriteLine(GetPlantStr(Current));
-                for (int plant = 2; plant < Current.Length - 2; plant++)
-                {
-                    foreach (Plat p in Plats)
-                    {
-                        bool match = true;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            bool p1 = p.Pattern[i];
-                            bool p2 = Current[plant + i - 2];
-                            if (p.Pattern[i] != Current[plant + i - 2])
-                            {
-                                match = false;
-                                break;
-                            }
-                        }
-                        
-                        if (match)
-                        {
-                            Next[plant] = p.Result;
-                            break;
-                        }
-                    }
-                }
-                SwapCurrentPlants();
+                RunGeneration();
             }
-
-            //Console.WriteLine($"after {Generations} gens:");
-            //Console.WriteLine(GetPlantStr(Current));
-
 
             int sum = 0;
             for (int i = 0; i < Current.Length; i++)
             {
                 if (Current[i])
-                    sum += i - Generations;
+                    sum += i - Plant0Idx;
             }
 
             // 58 is wrong (was only counting # of plants, not summing indicies)
@@ -180,19 +149,146 @@ namespace AdventOfCode2018
 
         protected override string Part2()
         {
-            return "unfinished";
+            ProcessInitialState(Input[0]);
+            // obviously were not going to run 50 billion generations, that would be impossible
+            // so we have to hack this
+            int Generations = 200;
+            List<int> repeatScores = new List<int>();
+            string plantState = GetTrimmedPlantStr(Current);
+            int gen = 1;
+            for (; gen < Generations; gen++)
+            {
+                RunGeneration();
+                string newPlantState = GetTrimmedPlantStr(Current);
+                // state of the plants hasn't changed, only shifted left or right (probably right)
+                if(newPlantState.Equals(plantState))
+                {
+                    int sum = 0;
+                    for (int i = 0; i < Current.Length; i++)
+                    {
+                        if (Current[i])
+                            sum += i - Plant0Idx;
+                    }
+
+                    repeatScores.Add(sum);
+
+                    if(repeatScores.Count > 1)
+                    {
+                        break;
+                    }
+                }
+                plantState = newPlantState;
+            }
+
+            // get how much the score increases each iteration
+            int diff = repeatScores[1] - repeatScores[0];
+            // get remaining number of iterations
+            long remainingGenerations = 50000000000 - gen;
+            // add it up
+            long score = remainingGenerations * diff + repeatScores[1];
+
+            // correct: 3099999999491 - got it on first try (whaat?)
+            return $"Pot Id sum: {score}";
         }
 
+        private void RunGeneration()
+        {
+            for (int plant = 2; plant < Current.Length - 2; plant++)
+            {
+                foreach (Plat p in Plats)
+                {
+                    bool match = true;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        bool p1 = p.Pattern[i];
+                        bool p2 = Current[plant + i - 2];
+                        if (p.Pattern[i] != Current[plant + i - 2])
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+
+                    if (match)
+                    {
+                        Next[plant] = p.Result;
+                        break;
+                    }
+                }
+            }
+
+            ExpandArrays();
+
+            SwapCurrentPlants();
+        }
+
+        private void ExpandArrays()
+        {
+            int lastPlantIdx = int.MaxValue;
+            for (int i = Current.Length - 1; i > 0; i--)
+            {
+                if (Current[i])
+                {
+                    lastPlantIdx = i;
+                    break;
+                }
+            }
+
+            if(lastPlantIdx + 5 >= Current.Length)
+            {
+                bool[] toResize = Current;
+                Array.Resize(ref toResize, Current.Length + 10);
+                Current = toResize;
+                toResize = Next;
+                Array.Resize(ref toResize, Next.Length + 10);
+                Next = toResize;
+            }
+        }
+
+        // gets full list of pots
         private string GetPlantStr(bool[] arr)
         {
-            string s = string.Empty;
+            StringBuilder sb = new StringBuilder(arr.Length);
             foreach(bool b in arr)
             {
-                if (b) s += '#';
-                else s += '.';
-
+                if (b) sb.Append('#');
+                else sb.Append('.');
             }
-            return s;
+            return sb.ToString();
+        }
+
+        // Returns the 'trimmed' string of pots containing plants
+        // e.g. if input is "...#.#.....", "#.#" is returned
+        private string GetTrimmedPlantStr(bool[] arr)
+        {
+            StringBuilder sb = new StringBuilder();
+            int firstHash = 0;
+            int lastHash = 0;
+            for(int i = 0; i < arr.Length; i++)
+            {
+                if (arr[i])
+                {
+                    firstHash = i;
+                    break;
+                }
+            }
+
+            for (int i = arr.Length - 1; i > 0; i--)
+            {
+                if (arr[i])
+                {
+                    lastHash = i;
+                    break;
+                }
+            }
+
+            for(int i = firstHash; i <= lastHash; i++)
+            {
+                if (arr[i]) sb.Append('#');
+                else sb.Append('.');
+            }
+
+            return sb.ToString();
         }
 
         [DebuggerDisplay("{PatternStr}")]
@@ -216,7 +312,6 @@ namespace AdventOfCode2018
 
             public string PatternStr { get; private set; }
         }
-
 
     }
 }
