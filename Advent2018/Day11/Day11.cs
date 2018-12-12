@@ -82,17 +82,20 @@
         public int GridSize = 300;
 
         private int[,] Grid;
+        private int[,] SAT;
 
         protected override void ProcessInput()
         {
             int arrSize = GridSize + 1;
             Grid = new int[arrSize, arrSize];
+            SAT = new int[arrSize, arrSize];
 
             for (int y = 1; y < arrSize; y++)
             {
                 for (int x = 1; x < arrSize; x++)
                 {
                     Grid[x, y] = GetPowerLevel(x, y);
+                    SAT[x,y] = Grid[x,y] + SAT[x - 1, y] + SAT[x, y - 1] - SAT[x - 1, y - 1];
                 }
             }
         }
@@ -102,16 +105,20 @@
             int maxPower = int.MinValue;
             int maxX = 0;
             int maxY = 0;
-            for(int y = 1; y <= GridSize - 2; y++)
+            int bestSize = 0;
+            int size = 3;
+
+            for(int y = 1; y < GridSize - size; y++)
             {
-                for(int x = 1; x <= GridSize - 2; x++)
+                for(int x = 1; x < GridSize - size; x++)
                 {
-                    int power = GetTotalPower(x, y, 3);
-                    if (power > maxPower)
+                    int power = SAT[x, y] + SAT[x + size, y + size] - SAT[x + size, y] - SAT[x, y + size];
+                    if (power >= maxPower)
                     {
                         maxPower = power;
-                        maxX = x;
-                        maxY = y;
+                        maxX = x + 1;
+                        maxY = y + 1;
+                        bestSize = size;
                     }
                 }
             }
@@ -128,35 +135,28 @@
             int maxY = 0;
             int bestSize = 0;
             int arrSize = GridSize + 1;
-            int[,] st = new int[arrSize, arrSize];
 
-            // build summed-area table 
-            // https://en.wikipedia.org/wiki/Summed-area_table 
-            for (int y = 1; y <= GridSize - 2; y++)
+            for (int size = 1; size <= GridSize; size++)
             {
-                for (int x = 1; x <= GridSize - 2; x++)
+                for (int y = 1; y < GridSize - size + 1; y++)
                 {
-                    st[x, y] = Grid[x, y] + st[x - 1, y] + st[x, y - 1] - st[x - 1, y - 1];
-                }
-            }
-
-            for (int size = 1; size < GridSize; size++)
-            {
-                for (int y = 1; y <= GridSize - size; y++)
-                {
-                    for (int x = 1; x <= GridSize - size; x++)
+                    for (int x = 1; x < GridSize - size + 1; x++)
                     {
-                        int power = st[x, y] + st[x + size, y + size] - st[x + size, y] - st[x, y + size];
-                        if (power > maxPower)
+                        int power = SAT[x, y] + SAT[x + size, y + size] - SAT[x + size, y] - SAT[x, y + size];
+                        if (power >= maxPower)
                         {
                             maxPower = power;
-                            maxX = x;
-                            maxY = y;
+                            maxX = x + 1;
+                            maxY = y + 1;
                             bestSize = size;
                         }
                     }
                 }
             }
+
+            // correct: 280,218,11 - but takes 8 mins
+            // incorrect 279,217,11 (x and y are off by -1 -> since using summed-area table, the actual location is +1 to each
+            // because the Summed-area table represents the sum of everything above and to the left
 
             return $"Max Power: {maxPower} at [{maxX},{maxY}] with size {bestSize}";
         }
