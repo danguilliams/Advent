@@ -4,6 +4,9 @@
 
 /Advent2018/obj/Debug
 *.suo
+*.exe
+*.pdb
+
 /Advent2018/.vs/AdventOfCode2018/v15/Server/sqlite3
 /Advent2018/bin/Debug
 /Advent2018/obj/Release
@@ -13,3 +16,6 @@
 /C#/Advent2015/obj/Debug
 /C#/Advent2016/obj/Debug
 /C#/Advent2017/obj/Debug
+/C#/Advent2015/bin/Debug
+/C#/Advent2016/bin/Debug
+/C#/Advent2017/bin/Debug

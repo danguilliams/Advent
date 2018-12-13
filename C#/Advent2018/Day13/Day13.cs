@@ -163,6 +163,52 @@ namespace AdventOfCode2018
      * 4\-+-/  \-+--/
      * 5  \------/   
      * In this example, the location of the first crash is 7,3.
+     * 
+     * Your puzzle answer was 41,22.
+     * 
+     * The first half of this puzzle is complete! It provides one gold star: *
+     * 
+     * --- Part Two ---
+     * There isn't much you can do to prevent crashes in this ridiculous system. However, by predicting the crashes, the Elves know where to be in advance and instantly remove the two crashing carts the moment any crash occurs.
+     * 
+     * They can proceed like this for a while, but eventually, they're going to run out of carts. It could be useful to figure out where the last cart that hasn't crashed will end up.
+     * 
+     * For example:
+     * 
+     * />-<\  
+     * |   |  
+     * | /<+-\
+     * | | | v
+     * \>+</ |
+     *   |   ^
+     *   \<->/
+     * 
+     * /---\  
+     * |   |  
+     * | v-+-\
+     * | | | |
+     * \-+-/ |
+     *   |   |
+     *   ^---^
+     * 
+     * /---\  
+     * |   |  
+     * | /-+-\
+     * | v | |
+     * \-+-/ |
+     *   ^   ^
+     *   \---/
+     * 
+     * /---\  
+     * |   |  
+     * | /-+-\
+     * | | | |
+     * \-+-/ ^
+     *   |   |
+     *   \---/
+     * After four very expensive crashes, a tick ends with only one cart remaining; its final location is 6,4.
+     * 
+     * What is the location of the last cart at the end of the first tick where it is the only cart left?
      */
     public class Day13 : Day
     {
@@ -231,12 +277,49 @@ namespace AdventOfCode2018
 
             // wrong: (117, 31) - initial turn direction was Right instead of Left
             //        (73, 87) - carts must be moved 1 at a time and checked for collisions
-            return $"First Collision: {collisionX},{collisionY}";
+            return $"First collision is at [{collisionX},{collisionY}]";
         }
 
         protected override string Part2()
         {
-            return "unfinished";
+            //reset everything
+            ProcessInput();
+
+            while (Carts.Count > 1)
+            {
+                foreach (Cart c in Carts.OrderBy(c => c.Y * 10000 + c.X))
+                {
+                    // move cart
+                    c.Move();
+                    // check for collisions
+                    for (int i = 0; i < Carts.Count; i++)
+                    {
+                        Cart a = Carts[i];
+                        if (a.Id != c.Id // can't collide with yourself
+                            && !a.Crashed && !c.Crashed // ignore already crashed carts
+                            && a.X == c.X && a.Y == c.Y)
+                        {
+                            // collision!
+                            c.Crashed = true;
+                            a.Crashed = true;
+                            break;
+                        }
+                    }
+                }
+
+                // check if this is the last cart 
+                if(Carts.Count == 1)
+                {
+                    break;
+                }
+                // removed crashed carts from the lsit
+                Carts.RemoveAll(c => c.Crashed);
+            }
+
+            Cart last = Carts[0];
+            // incorrect: [85,90] - cart moved one more time when it was the last cart
+            // correct: [84,90]
+            return $"Last Cart is at [{last.X},{last.Y}]";
         }
 
         private enum Direction
@@ -261,6 +344,7 @@ namespace AdventOfCode2018
                 Id = id;
                 X = x;
                 Y = y;
+                Crashed = false;
                 track = t;
                 switch (d)
                 {
@@ -284,6 +368,7 @@ namespace AdventOfCode2018
             public int X;
             public int Y;
             public int Id;
+            public bool Crashed;
             private char[,] track;
             public Direction Dir;
             public Turn NextTurn;
@@ -336,7 +421,7 @@ namespace AdventOfCode2018
                 }
                 else if (next != '-' && next != '|')
                 {
-                    Console.WriteLine("uhhhh");
+                    throw new Exception($"Cart went off the track at [{this.X},{this.Y}]! :O");
                 }
             }
 
