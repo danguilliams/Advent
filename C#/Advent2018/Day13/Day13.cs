@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace AdventOfCode2018
@@ -175,19 +176,21 @@ namespace AdventOfCode2018
         {
             Track = new char[150, 150];
             Carts = new List<Cart>();
+            int id = 0;
             for (int y = 0; y < 150; y++)
             {
+                string curLine = Input[y];
                 for (int x = 0; x < 150; x++)
                 {
-                    char next = Input[y][x];
+                    char next = curLine[x];
                     if (next == '>' || next == '<')
                     {
-                        Carts.Add(new Cart(x, y, next));
+                        Carts.Add(new Cart(id++, x, y, next, Track));
                         Track[x, y] = '-';
                     }
                     else if( next == '^' || next == 'v')
                     {
-                        Carts.Add(new Cart(x, y, next));
+                        Carts.Add(new Cart(id++, x, y, next, Track));
                         Track[x, y] = '|';
                     }
                     else
@@ -200,7 +203,35 @@ namespace AdventOfCode2018
 
         protected override string Part1()
         {
-            return "unfinished";
+            bool collided = false;
+            int collisionX = 0, collisionY = 0;
+            while (!collided)
+            {
+                foreach (Cart c in Carts.OrderBy(c => c.Y * 10000 + c.X))
+                {
+                    // move cart
+                    c.Move();
+                    // check for collisions
+                    for (int i = 0; i < Carts.Count; i++)
+                    {
+                        Cart a = Carts[i];
+                        if (a.Id != c.Id // can't collide with yourself
+                            && a.X == c.X && a.Y == c.Y)
+                        {
+                            // collision!
+                            collisionX = a.X;
+                            collisionY = a.Y;
+                            collided = true;
+                            break;
+                        }
+                    }
+                    if (collided) break;
+                }
+            }
+
+            // wrong: (117, 31) - initial turn direction was Right instead of Left
+            //        (73, 87) - carts must be moved 1 at a time and checked for collisions
+            return $"First Collision: {collisionX},{collisionY}";
         }
 
         protected override string Part2()
@@ -225,10 +256,12 @@ namespace AdventOfCode2018
 
         private class Cart
         {
-            public Cart(int x, int y, char d)
+            public Cart(int id, int x, int y, char d, char[,] t)
             {
+                Id = id;
                 X = x;
                 Y = y;
+                track = t;
                 switch (d)
                 {
                     case '>':
@@ -245,17 +278,19 @@ namespace AdventOfCode2018
                         break;
                 }
 
-                NextTurn = Turn.Right;
-
+                NextTurn = Turn.Left;
             }
 
             public int X;
             public int Y;
+            public int Id;
+            private char[,] track;
             public Direction Dir;
             public Turn NextTurn;
 
-            public void Move(char[,] Track)
+            public void Move()//char[,] Track)
             {
+                // move 1 in current direction
                 switch (Dir)
                 {
                     case Direction.Left:
@@ -271,7 +306,8 @@ namespace AdventOfCode2018
                         Y++;
                         break;
                 }
-                char next = Track[X, Y];
+                // get current track piece, turn if necessary
+                char next = track[X, Y];
                 if (next == '+')
                 {
                     Intersection();
@@ -298,9 +334,10 @@ namespace AdventOfCode2018
                         TurnRight();
                     }
                 }
-
-
-
+                else if (next != '-' && next != '|')
+                {
+                    Console.WriteLine("uhhhh");
+                }
             }
 
             private void Intersection()
