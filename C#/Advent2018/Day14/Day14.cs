@@ -60,7 +60,7 @@ namespace AdventOfCode2018
      */
     public class Day14 : Day
     {
-        public override int PuzzleDay =>14;
+        public override int PuzzleDay => 14;
 
         private int TotalRecipes => 147061;
 
@@ -75,7 +75,7 @@ namespace AdventOfCode2018
             LinkedListNode<int> elf1 = scores.First;
             LinkedListNode<int> elf2 = elf1.Next;
 
-            for(int recipeId = 3; recipeId < TotalRecipes + 11; recipeId++)
+            for(int recipeId = 3; recipeId <= TotalRecipes + 10; recipeId++)
             {
                 int newScore = elf1.Value + elf2.Value;
 
@@ -128,13 +128,15 @@ namespace AdventOfCode2018
 
         protected override string Part2()
         {
-            int[] targets = TotalRecipes.ToString().ToCharArray().Select(c => int.Parse(c.ToString())).ToArray();
+            int[] targetScores = TotalRecipes.ToString().ToCharArray().Select(c => int.Parse(c.ToString())).ToArray();
 
             LinkedList<int> scores = new LinkedList<int>();
             scores.AddLast(FirstScore);
             scores.AddLast(SecondScore);
+
             LinkedListNode<int> elf1 = scores.First;
             LinkedListNode<int> elf2 = elf1.Next;
+            int tIdx = targetScores.Length - 1;
             while (true)
             {
                 int newScore = elf1.Value + elf2.Value;
@@ -145,17 +147,16 @@ namespace AdventOfCode2018
                 {
                     scores.AddLast(1);
 
-                    if (targets[targets.Length - 1] == 1 && CheckScores(scores, targets))
+                    if (targetScores[tIdx] == 1 && ScoresMatch(scores, targetScores))
                     {
                         break;
                     }
                 }
-
-                newScore = newScore % 10;
                 // add score for 1s digit
+                newScore = newScore % 10;
                 scores.AddLast(newScore);
 
-                if (targets[targets.Length - 1] == newScore && CheckScores(scores, targets))
+                if (targetScores[tIdx] == newScore && ScoresMatch(scores, targetScores))
                 {
                     break;
                 }
@@ -164,14 +165,12 @@ namespace AdventOfCode2018
                 Advance(ref elf2);
             }
 
-            string result = $"{scores.Count - targets.Length} recipes";
-            return result;
+            return $"{scores.Count - targetScores.Length} recipes";
         }
 
-        private bool CheckScores(LinkedList<int> scores, int[] targets)
+        private bool ScoresMatch(LinkedList<int> scores, int[] targets)
         {
             LinkedListNode<int> current = scores.Last;
-            bool match = true;
 
             for(int i = targets.Length - 1; i >= 0 && current != null; i--)
             {
@@ -179,14 +178,13 @@ namespace AdventOfCode2018
                 int v2 = targets[i];
                 if(current.Value != targets[i])
                 {
-                    match = false;
-                    break;
+                    return false;
                 }
 
                 current = current.Previous;
             }
 
-            return match;
+            return true;
         }
     }
 }
