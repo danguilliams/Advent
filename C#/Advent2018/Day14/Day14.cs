@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -48,6 +44,19 @@ namespace AdventOfCode2018
      * What are the scores of the ten recipes immediately after the number of recipes in your puzzle input?
      * 
      * Your puzzle input is 147061.
+     * 
+     * Your puzzle answer was 2145581131.
+     * 
+     * The first half of this puzzle is complete! It provides one gold star: *
+     * 
+     * --- Part Two ---
+     * As it turns out, you got the Elves' plan backwards. They actually want to know how many recipes appear on the scoreboard to the left of the first recipes whose scores are the digits from your puzzle input.
+     * 
+     * 51589 first appears after 9 recipes.
+     * 01245 first appears after 5 recipes.
+     * 92510 first appears after 18 recipes.
+     * 59414 first appears after 2018 recipes.
+     * How many recipes appear on the scoreboard to the left of the score sequence in your puzzle input?
      */
     public class Day14 : Day
     {
@@ -66,7 +75,7 @@ namespace AdventOfCode2018
             LinkedListNode<int> elf1 = scores.First;
             LinkedListNode<int> elf2 = elf1.Next;
 
-            for(int recipeId = 3; recipeId < TotalRecipes; recipeId++)
+            for(int recipeId = 3; recipeId < TotalRecipes + 11; recipeId++)
             {
                 int newScore = elf1.Value + elf2.Value;
 
@@ -75,35 +84,13 @@ namespace AdventOfCode2018
                 if(newScore >= 10)
                 {
                     scores.AddLast(1);
+                    recipeId++;
                 }
                 // add score for 1s digit
                 scores.AddLast(newScore % 10);
 
-                int elfAdvance = elf1.Value + 1;
-                for (int i = 0; i < elfAdvance; i++)
-                {
-                    if (elf1.Next == null)
-                    {
-                        elf1 = scores.First;
-                    }
-                    else
-                    {
-                        elf1 = elf1.Next;
-                    }
-                }
-
-                elfAdvance = elf2.Value + 1;
-                for (int i = 0; i < elfAdvance; i++)
-                {
-                    if (elf1.Next == null)
-                    {
-                        elf2 = scores.First;
-                    }
-                    else
-                    {
-                        elf2 = elf2.Next;
-                    }
-                }
+                Advance(ref elf1);
+                Advance(ref elf2);
             }
 
             LinkedListNode<int> current = scores.First;
@@ -113,26 +100,93 @@ namespace AdventOfCode2018
                 current = current.Next;
             }
 
+            string next10 = "";
+            for(int i = 0; i < 10; i++)
+            {
+                next10 += current.Value;
+                current = current.Next;
+            }
 
-            return "unsolved";
+            return next10;
+        }
+
+        private void Advance(ref LinkedListNode<int> node)
+        {
+            int advances = node.Value + 1;
+            for (int i = 0; i < advances; i++)
+            {
+                if (node.Next == null)
+                {
+                    node = node.List.First;
+                }
+                else
+                {
+                    node = node.Next;
+                }
+            }
         }
 
         protected override string Part2()
         {
-            return "unsolved";
-        }
+            int[] targets = TotalRecipes.ToString().ToCharArray().Select(c => int.Parse(c.ToString())).ToArray();
 
-        [DebuggerDisplay("Val: {Val} Next:{Next?.Val} Prev:{Prev?.Val}")]
-        private class LLN
-        {
-            public LLN(int val)
+            LinkedList<int> scores = new LinkedList<int>();
+            scores.AddLast(FirstScore);
+            scores.AddLast(SecondScore);
+            LinkedListNode<int> elf1 = scores.First;
+            LinkedListNode<int> elf2 = elf1.Next;
+            while (true)
             {
-                Val = val;
+                int newScore = elf1.Value + elf2.Value;
+
+                // score will never be more than 18, so first score is always 1
+                // iff the new score is over 10
+                if (newScore >= 10)
+                {
+                    scores.AddLast(1);
+
+                    if (targets[targets.Length - 1] == 1 && CheckScores(scores, targets))
+                    {
+                        break;
+                    }
+                }
+
+                newScore = newScore % 10;
+                // add score for 1s digit
+                scores.AddLast(newScore);
+
+                if (targets[targets.Length - 1] == newScore && CheckScores(scores, targets))
+                {
+                    break;
+                }
+                
+                Advance(ref elf1);
+                Advance(ref elf2);
             }
 
-            public int Val { get; private set; }
-            public LLN Next { get; set; }
-            public LLN Prev { get; set; }
+            string result = $"{scores.Count - targets.Length} recipes";
+            return result;
+        }
+
+        private bool CheckScores(LinkedList<int> scores, int[] targets)
+        {
+            LinkedListNode<int> current = scores.Last;
+            bool match = true;
+
+            for(int i = targets.Length - 1; i >= 0 && current != null; i--)
+            {
+                int v1 = current.Value;
+                int v2 = targets[i];
+                if(current.Value != targets[i])
+                {
+                    match = false;
+                    break;
+                }
+
+                current = current.Previous;
+            }
+
+            return match;
         }
     }
 }
