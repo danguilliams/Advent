@@ -29,6 +29,7 @@ namespace AdventOfCode2018
             Console.Write(PuzzleDay);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("]");
+            Console.ForegroundColor = ConsoleColor.White;
             Timer.Start();
             ProcessInput();
             string part1 = Part1();
