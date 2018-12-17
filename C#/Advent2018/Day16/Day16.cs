@@ -11,18 +11,20 @@ namespace AdventOfCode2018
         public override int PuzzleDay => 16;
         private List<Sample> Samples;
         private List<Instruction> Instructions;
-        private List<IOp> Ops;
+        private List<Operation> Ops;
 
         protected override void ProcessInput()
         {
             Samples = new List<Sample>();
             Instructions = new List<Instruction>();
-            Ops = new List<IOp>();
+            Ops = new List<Operation>();
+            int sampleNum = 0;
+
             for(int i = 0; i < Input.Length; i++)
             {
                 if(Input[i].StartsWith("Before"))
                 {
-                    Samples.Add(new Sample(Input[i], Input[i+1], Input[i+2]));
+                    Samples.Add(new Sample(sampleNum++, Input[i], Input[i+1], Input[i+2]));
                     i += 2;
                 }
                 else if (Input[i].Length > 2 && Input[i].Length < 10)
@@ -31,22 +33,59 @@ namespace AdventOfCode2018
                 }
             }
 
-            Ops.Add(new IOp("addr", (r) => r));
-            Ops.Add(new IOp("addi", (r) => r));
-            Ops.Add(new IOp("mulr", (r) => r));
-            Ops.Add(new IOp("muli", (r) => r));
-            Ops.Add(new IOp("banr", (r) => r));
-            Ops.Add(new IOp("bani", (r) => r));
-            Ops.Add(new IOp("borr", (r) => r));
-            Ops.Add(new IOp("bori", (r) => r));
-            Ops.Add(new IOp("setr", (r) => r));
-            Ops.Add(new IOp("seti", (r) => r));
-            Ops.Add(new IOp("gtir", (r) => r));
-            Ops.Add(new IOp("gtri", (r) => r));
-            Ops.Add(new IOp("gtrr", (r) => r));
-            Ops.Add(new IOp("eqir", (r) => r));
-            Ops.Add(new IOp("eqri", (r) => r));
-            Ops.Add(new IOp("eqrr", (r) => r));
+            // in i => i[1] = A, i[2] = B, i[3] = C
+            //addr (add register) stores into register C the result of adding register A and register B.
+            Ops.Add(new Operation("addr", (r, i) => {
+                r[i[3]] = r[i[1]] + r[i[2]];
+            }));
+
+            //addi (add immediate) stores into register C the result of adding register A and value B.
+            Ops.Add(new Operation("addi", (r, i) => {
+                r[3] = r[i[1]] + i[2];
+            }));
+
+            Ops.Add(new Operation("mulr", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("muli", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("banr", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("bani", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("borr", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("bori", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("setr", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("seti", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("gtir", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("gtri", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("gtrr", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("eqir", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("eqri", (r, i) => {
+            }));
+
+            Ops.Add(new Operation("eqrr", (r, i) => {
+            }));
+
         }
 
         protected override string Part1()
@@ -62,29 +101,44 @@ namespace AdventOfCode2018
 
         private class IOp
         {
-            public IOp(string id, Func<int[], int[]> o)
+            public IOp(int[] instruction)
             {
-                Id = id;
-                Op = o;
+                Id = instruction[0];
+                I = instruction;
             }
 
-            public string Id;
-            public Func<int[], int[]> Op;
+            public int Id;
+            public int[] I;
+            public void Execute(int[] r, Operation op)
+            {
+                op.Op(r, I);
+            }
         }
 
+        private class Operation
+        {
+            public Operation(string id, Action<int[], int[]> op)
+            {
+                Id = id;
+                Op = op;
+            }
+            public Action<int[], int[]> Op;
+            public string Id;
+        }
 
         private class Sample
         {
-            public Sample(string before, string op, string after)
+            public Sample(int id, string before, string op, string after)
             {
                 Before = ParseOps(before);
-                Op = ParseOps(op);
+                Op = new IOp(ParseOps(op));
                 After = ParseOps(after);
             }
 
-            int[] Before;
-            int[] Op;
-            int[] After;
+            public int Id;
+            public int[] Before;
+            public IOp Op;
+            public int[] After;
         }
 
 
