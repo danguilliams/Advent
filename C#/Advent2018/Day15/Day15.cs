@@ -8,6 +8,8 @@ using System.Threading;
 namespace AdventOfCode2018
 {
     /*
+     * The devil is in the details
+     * 
      * --- Day 15: Beverage Bandits ---
      * Having perfected their hot chocolate, the Elves have a new problem: the Goblins that live in these caves will do anything to steal it. Looks like they're here for a fight.
      * 
@@ -285,6 +287,7 @@ namespace AdventOfCode2018
     {
         public override int PuzzleDay => 15;
 
+        private string GameId;
         private char[,] Cave;
         private const char Wall = '#';
         private const char Open = '.';
@@ -293,41 +296,200 @@ namespace AdventOfCode2018
         private IEnumerable<Mob> Elves { get { return Mobs.Where(m => m.IsElf); } }
         private int ElfCount { get { return Mobs.Count(m => m.IsElf); } }
         private int GoblinCount { get { return Mobs.Count(m => !m.IsElf); } }
+        private Func<bool> NormalGame => () => ElfCount > 0 && GoblinCount > 0;
+
         private IEnumerable<Mob> Goblins { get { return Mobs.Where(m => !m.IsElf); } }
         private List<Mob> Mobs;
         private Vec OrigCursPos;
 
         protected override void ProcessInput()
         {
-            string[] input = Input;
-                //{ "#######",
-                //  "#.G...#",
-                //  "#...EG#",
-                //  "#.#.#G#",
-                //  "#..G#E#",
-                //  "#.....#",
-                //  "#######"};
-
-            Input = input;
-            CaveWidth = Input[0].Length;
-            CaveHeight = Input.Length;
-
-            Console.WindowHeight = Math.Max(Console.WindowHeight, CaveHeight + CaveHeight / 4);
             OrigCursPos = new Vec(Console.CursorLeft, Console.CursorTop);
-            Console.CursorVisible = false;
+           // Console.CursorVisible = false;
 
+            //RunTests();
+        }
+
+        protected override string Part1()
+        {
+            ResetGame(Input, $"Part 1:", 3);
+            //Console.WriteLine("\t running...");
+            GameResult result = RunGame(() => ElfCount > 0 && GoblinCount > 0, false, false);
+            //PrintCave(result.Rounds, Mobs);
+            // wrong: 231182 (too low - not calculating end of last turn right)
+            //        228823 (too low - when multiple closest targets exist, was selecting first-reading-order first step, not first-reading-order target square)
+
+            return $"{result.Winner} win after {result.Rounds}, {result.Rounds} x {result.TotalHealth} = {result.Outcome}";
+        }
+
+        protected override string Part2()
+        {
+            string resultStr = string.Empty;
+            for(int elfPwr = 4; elfPwr < 20; elfPwr++)
+            {
+                ResetGame(Input, $"Part 2, round {elfPwr - 3}:", elfPwr);
+                //Console.WriteLine("\t running...");
+                int originalElfCount = ElfCount;
+                GameResult result = RunGame(() => ElfCount == originalElfCount && GoblinCount > 0, false, false);
+                //PrintCave(result.Rounds, Mobs);
+                if(ElfCount == originalElfCount && GoblinCount == 0)
+                {
+                    resultStr = $"elf attack power: {elfPwr} {result.Winner} win after {result.Rounds}, {result.Rounds} x {result.TotalHealth} = {result.Outcome}";
+                    //Console.WriteLine(result.ToString() + new string(' ', 20));
+                    break;
+                } else
+                {
+                    //Console.WriteLine(result.ToString() + new string(' ', 20));
+                }
+            }
+
+            return resultStr;
+        }
+
+        private void RunTests()
+        {
+            List<TestInput> testInputs = new List<TestInput>()
+            {
+                new TestInput()
+                { // 47 * 590 = 27730
+                    Id = 1,
+                    Rounds = 47,
+                    Health = 590,
+                    Outcome = 27730,
+                    Input = new string[]
+                    { "#######",
+                      "#.G...#",
+                      "#...EG#",
+                      "#.#.#G#",
+                      "#..G#E#",
+                      "#.....#",
+                      "#######" }
+                },
+                new TestInput()
+                { // 37 * 982 = 36334
+                    Id = 2,
+                    Rounds = 37,
+                    Health = 982,
+                    Outcome = 36334,
+                    Input = new string[]
+                    { "#######",
+                      "#G..#E#",
+                      "#E#E.E#",
+                      "#G.##.#",
+                      "#...#E#",
+                      "#...E.#",
+                      "#######" }
+                },
+                new TestInput()
+                { //46 * 859 = 
+                    Id = 3,
+                    Rounds = 46,
+                    Health = 859,
+                    Outcome = 39514,
+                    Input = new string[]
+                    { "#######",
+                      "#E..EG#",
+                      "#.#G.E#",
+                      "#E.##E#",
+                      "#G..#.#",
+                      "#..E#.#",
+                      "#######" }
+                },
+                new TestInput()
+                { //35 * 793 = 27755
+                    Id = 4,
+                    Rounds = 35,
+                    Health = 793,
+                    Outcome = 27755,
+                    Input = new string[]
+                    { "#######",
+                      "#E.G#.#",
+                      "#.#G..#",
+                      "#G.#.G#",
+                      "#G..#.#",
+                      "#...E.#",
+                      "#######" }
+                },
+                new TestInput()
+                { //54 * 536 = 28944
+                    Id = 5,
+                    Rounds = 54,
+                    Health = 536,
+                    Outcome = 28944,
+                    Input = new string[]
+                    { "#######",
+                      "#.E...#",
+                      "#.#..G#",
+                      "#.###.#",
+                      "#E#G#G#",
+                      "#...#G#",
+                      "#######" }
+                },
+                new TestInput()
+                { // 20 * 937 = 18740
+                    Id = 6,
+                    Rounds = 20,
+                    Health = 937,
+                    Outcome = 18740,
+                    Input = new string[]
+                    { "#########",
+                      "#G......#",
+                      "#.E.#...#",
+                      "#..##..G#",
+                      "#...##..#",
+                      "#...#...#",
+                      "#.G...G.#",
+                      "#.....G.#",
+                      "#########" }
+                },
+            };
+            int passed = 0;
+            int failed = 0;
+            foreach (TestInput test in testInputs)
+            {
+                ResetGame(test.Input, $"Test {test.Id}", 3);
+                GameResult result = RunGame(NormalGame, true, true);
+                Console.WriteLine();
+                if (result.Outcome != test.Outcome)
+                {
+                    string resultStr = $"Fail! Ex Rs:{test.Rounds} Act Rs:{result.Rounds} Ex hp:{test.Health} act hp:{result.TotalHealth}";
+                    Console.WriteLine(resultStr + new string(' ', 50));
+                    failed++;
+                }
+                else
+                {
+                    Console.WriteLine("Pass! " + result.ToString());
+                    passed++;
+                }
+                Console.WriteLine($"pass:{passed} fail:{failed} total:{passed + failed}");
+
+            }
+        }
+
+
+        private void ResetGame(string[] inputs, string id, int elfAtk)
+        {
+            string[] input = inputs;
+            CaveWidth = input[0].Length;
+            CaveHeight = input.Length;
+            GameId = id;
+           //Console.WindowHeight = Math.Max(Console.WindowHeight, CaveHeight + CaveHeight / 4);
+           //Console.CursorLeft = OrigCursPos.X;
+           //Console.CursorTop = OrigCursPos.Y;
+           //Console.Write($"{id}");
+           //Console.WriteLine();
             Cave = new char[CaveWidth, CaveHeight];
             Mobs = new List<Mob>();
 
-            for (int y = 0; y < Input.Length; y++)
+            for (int y = 0; y < input.Length; y++)
             {
-                for (int x = 0; x < Input[y].Length; x++)
+                for (int x = 0; x < input[y].Length; x++)
                 {
-                    char c = Input[y][x];
+                    char c = input[y][x];
                     switch (c)
                     {
                         case 'E':
-                            Elf newElf = new Elf(Elves.Count(), x, y, Cave);
+                            Elf newElf = new Elf(Elves.Count(), x, y, Cave, elfAtk);
                             Mobs.Add(newElf);
                             Cave[x, y] = newElf.Id;
                             break;
@@ -344,64 +506,80 @@ namespace AdventOfCode2018
             }
         }
 
-        protected override string Part1()
+        private GameResult RunGame(Func<bool> condition, bool throttled = false, bool printCave = false)
         {
             int turn = 0;
             Stopwatch t = new Stopwatch();
             t.Start();
-            while(ElfCount > 0 && GoblinCount > 0)
+            while (condition())
             {
                 t.Reset();
-                PrintCave(turn);
+                if(printCave)
+                {
+                    PrintCave(turn, Mobs);
+                }
 
-                Console.ForegroundColor = ConsoleColor.White;
-                StringBuilder sb = new StringBuilder();
+                bool fullTurn = true;
                 foreach (Mob mob in Mobs.OrderBy(m => m.Pos.Y * 10000 + m.Pos.X).ToList())
                 {
-                    if(mob.Alive && OpponentCount(mob) > 0)
+                    if (mob.Alive)
                     {
-                        sb.Append(mob.Id);
-                        if(!mob.CanAttack())
+                        if (condition())
                         {
-                            mob.Move(Mobs.Where(m => m.IsElf != mob.IsElf));
-                        }
+                            if (!mob.CanAttack())
+                            {
+                                mob.Move(Mobs.Where(m => m.IsElf != mob.IsElf));
+                            }
 
-                        Mob attacked = mob.Attack(Mobs.Where(m => m.IsElf != mob.IsElf));
-                        if(attacked != null && !attacked.Alive)
+                            Mob attacked = mob.Attack(Mobs.Where(m => m.IsElf != mob.IsElf));
+                            if (attacked != null && !attacked.Alive)
+                            {
+                                Mobs.Remove(attacked);
+                                Cave[attacked.Pos.X, attacked.Pos.Y] = Open;
+                            }
+                        }
+                        else
                         {
-                            Mobs.Remove(attacked);
-                            Cave[attacked.Pos.X, attacked.Pos.Y] = Open;
+                            fullTurn = false;
                         }
                     }
-
-                    //PrintCave(turn, mob);
                 }
-                Console.WriteLine("Turn Order: " + sb.ToString());
-                turn++;
-                t.Stop();
-                if(t.ElapsedMilliseconds < 100)
+                if(fullTurn)
                 {
-                    Thread.Sleep(100 - (int)t.ElapsedMilliseconds);
+                    turn++;
+                }
+
+                t.Stop();
+                if (throttled && t.ElapsedMilliseconds < 40)
+                {
+                    Thread.Sleep(40 - (int)t.ElapsedMilliseconds);
                 }
             }
 
-            PrintCave(turn);
-
-            int health = 0;
-            if(Mobs.Any(m => m.IsElf))
+            if(printCave)
             {
-                // elves win
-                health = Mobs.Where(m => m.IsElf && m.Alive).Sum(m => m.HP);
+                PrintCave(turn, Mobs);
+            }
+
+            GameResult result = new GameResult();
+            result.Rounds = turn;
+            if (Mobs.Any(m => !m.IsElf))
+            {
+                var remainingGoblins = Mobs.Where(m => !m.IsElf && m.Alive);
+                result.Winner = "Goblins";
+                result.Remaining = remainingGoblins.Count();
+                result.TotalHealth = remainingGoblins.Sum(m => m.HP);
             }
             else
             {
-                health = Mobs.Where(m => !m.IsElf && m.Alive).Sum(m => m.HP);
+                // elves win
+                var remainingElves = Mobs.Where(m => m.IsElf && m.Alive);
+                result.Winner = "Elves";
+                result.Remaining = remainingElves.Count();
+                result.TotalHealth = remainingElves.Sum(m => m.HP);
             }
 
-            int result = health * (turn );
-            // wrong: 231182 (too low?)
-
-            return $"{result}";
+            return result;
         }
 
         private int OpponentCount(Mob mob)
@@ -409,10 +587,30 @@ namespace AdventOfCode2018
             return mob.IsElf ? GoblinCount : ElfCount; 
         }
 
-        protected override string Part2()
+        private class GameResult
         {
-            return "unsolved";
+            public string Winner;
+            public int Rounds;
+            public int Remaining;
+            public int TotalHealth;
+            public int Outcome => Rounds * TotalHealth;
+
+            public override string ToString()
+            {
+                return $"{Winner} win in {Rounds} rounds, {Remaining} left with {TotalHealth} health, score {Outcome}";
+            }
         }
+
+
+        private class TestInput
+        {
+            public int Id;
+            public string[] Input;
+            public int Outcome;
+            public int Rounds;
+            public int Health;
+        }
+
 
         [DebuggerDisplay("[{X},{Y}]")]
         private class Vec 
@@ -487,12 +685,12 @@ namespace AdventOfCode2018
 
         private class Mob
         {
-            protected Mob(char id, int xPos, int yPos, char[,] cave, bool isElf)
+            protected Mob(char id, int xPos, int yPos, char[,] cave, bool isElf, int attack)
             {
                 Id = id;
                 Pos = new Vec(xPos, yPos);
                 HP = 200;
-                Atk = 3;
+                Atk = attack;
                 Moved = false;
                 IsElf = isElf;
                 Cave = cave;
@@ -532,6 +730,11 @@ namespace AdventOfCode2018
                 {
                     return c < 65;
                 }
+            }
+
+            public override string ToString()
+            {
+                return $"{Id}({HP})";
             }
 
             public Mob Attack(IEnumerable<Mob> enemies)
@@ -607,15 +810,22 @@ namespace AdventOfCode2018
 
                     if (shortestPaths.Any())
                     {
-                        Vec next = shortestPaths.Values.OrderBy(p => p[0].GetHashCode()).First()[0];
+                        Vec nextStep = null;
 
-                        if (Math.Abs(next.X - X) + Math.Abs(next.Y - Y) != 1)
+                        if (shortestPaths.Count > 1)
+                        {
+                            nextStep = new Vec(0, 0);
+                        }
+
+                        CNode target = shortestPaths.Keys.OrderBy(c => c.Pos.GetHashCode()).First();
+                        nextStep = shortestPaths[target][0];
+                        if (Math.Abs(nextStep.X - X) + Math.Abs(nextStep.Y - Y) != 1)
                         {
                             throw new Exception("Next step should not be more that 1 space away!");
                         }
 
                         Cave[X, Y] = Open;
-                        Pos = next;
+                        Pos = nextStep;
                         Cave[X, Y] = Id;
                     }
                 }
@@ -695,7 +905,7 @@ namespace AdventOfCode2018
         private class Elf : Mob
         {
             public static string Ids = "1234567890";
-            public Elf(int id, int xPos, int yPos, char[,] cave) : base(Ids[id], xPos, yPos, cave, true)
+            public Elf(int id, int xPos, int yPos, char[,] cave, int atk) : base(Ids[id], xPos, yPos, cave, true, atk)
             {
             }
         }
@@ -703,7 +913,7 @@ namespace AdventOfCode2018
         private class Goblin : Mob
         {
             public static string Ids = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            public Goblin(int id, int xPos, int yPos, char[,] cave) : base(Ids[id], xPos, yPos, cave, false)
+            public Goblin(int id, int xPos, int yPos, char[,] cave) : base(Ids[id], xPos, yPos, cave, false, 3)
             {
             }
         }
@@ -733,13 +943,14 @@ namespace AdventOfCode2018
             public List<Vec> Neighbors { get; private set; }
         }
 
-        private void PrintCave(int turn, Mob lastMoved = null)
+        private void PrintCave(int turn, List<Mob> mobs, Mob lastMoved = null)
         {
             Console.CursorLeft = 0;
             Console.CursorTop = OrigCursPos.Y + 1;
-            Console.WriteLine($"Turn {turn} start:");
             int xDigits = CaveWidth.ToString().Length;
             int yDigits = CaveHeight.ToString().Length;
+            Console.WriteLine($"Turn {turn}:" + new string(' ', 40));
+            int cWidth = Console.WindowWidth;
             for(int d = xDigits; d > 0; d--)
             {
                 for(int x = 0; x < yDigits; x++)
@@ -751,8 +962,9 @@ namespace AdventOfCode2018
                     int digit = (x / ((int)Math.Pow(10,d - 1)))%10;
                     Console.Write(digit);
                 }
-                Console.Write('\n');
+                Console.WriteLine();
             }
+            
             for (int y = 0; y < CaveHeight; y++)
             {
                 Console.ForegroundColor = ConsoleColor.White;
@@ -767,7 +979,17 @@ namespace AdventOfCode2018
                     Console.ForegroundColor = GetColor(c);
                     Console.Write(c);
                 }
-                Console.Write('\n');
+                Console.ForegroundColor = ConsoleColor.White;
+                foreach (Mob m in mobs.Where(m => m.Y == y).OrderBy(m => m.X))
+                {
+                    Console.ForegroundColor = GetColor(m.Id);
+                    Console.Write(" " + m.ToString());
+                }
+                int cPos = Console.CursorLeft;
+                for(int i = cPos; i < cWidth; i++)
+                {
+                    Console.Write(' ');
+                }
             }
             if(lastMoved != null)
             {
