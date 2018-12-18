@@ -162,7 +162,31 @@ namespace AdventOfCode2018
 
         protected override string Part2()
         {
-            throw new NotImplementedException();
+            int umm = 0;
+            Dictionary<int, Operation> opDict = new Dictionary<int, Operation>();
+            while (Samples.Any(s => s.MatchingOps.Count == 1))
+            {
+                List<Sample> unique = Samples.Where(s => s.MatchingOps.Count == 1).ToList();
+                int currentOpCode = unique[0].Instr.OpCode;
+                if(currentOpCode == 8)
+                {
+                    umm++;
+                }
+                Operation op = Ops.First(o => o.Id == unique[0].MatchingOps[0]);
+                if(!opDict.ContainsKey(currentOpCode))
+                {
+                    opDict[currentOpCode] = op;
+                }
+                // remove this op from any other samples that matched
+                foreach(Sample s in Samples)
+                {
+                    s.MatchingOps.Remove(op.Id);
+                }
+            }
+
+            IEnumerable<int> remainingOpCodes = Samples.Where(s => s.MatchingOps.Count > 0).Select(s => s.Instr.OpCode).Distinct();
+            IEnumerable<Operation> remainingOps = Ops.Where(o => !opDict.Values.Select(v => v.Id).Contains(o.Id));
+            return "";
         }
 
         [DebuggerDisplay("{Id}")]
@@ -195,6 +219,7 @@ namespace AdventOfCode2018
             public List<string> MatchingOps;
         }
 
+        [DebuggerDisplay("{OpCode}:[{A},{B},{C}]")]
         private class Instruction
         {
             public Instruction(string instr)
