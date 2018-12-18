@@ -181,6 +181,11 @@ namespace AdventOfCode2018
                 remaining.RemoveAll(s => s.Instr.OpCode == currentOpCode);
             }
 
+            if(opDict.Count != Ops.Count)
+            {
+                throw new Exception("Op Codes have not all been determined!");
+            }
+
             int[] regs = { 0, 0, 0, 0 };
             foreach(Instruction i in Instructions)
             {

@@ -163,17 +163,16 @@ namespace AdventOfCode2018
     public class Day18 : Day
     {
         public override int PuzzleDay => 18;
-        public char[,] Cur;
-        public char[,] Next;
-        public int YardWidth;
-        public int YardHeight;
-        public static char Open = '.';
-        public static char Trees = '|';
-        public static char Lumber = '#';
+        private char[,] Cur;
+        private char[,] Next;
+        private int YardWidth;
+        private int YardHeight;
+        private const char Open = '.';
+        private const char Trees = '|';
+        private const char Lumber = '#';
+        private Tuple<int, int> CursorPos;
 
-        protected override void ProcessInput()
-        {
-            string[] testInput = {
+        private string[] testInput = {
                 ".#.#...|#.",
                 ".....#|##|",
                 ".|..|...#.",
@@ -185,7 +184,13 @@ namespace AdventOfCode2018
                 "|.||||..|.",
                 "...#.|..|."};
 
-            string[] input = testInput;
+        protected override void ProcessInput()
+        {
+            CursorPos = new Tuple<int, int>(Console.CursorLeft, Console.CursorTop);
+        }
+
+        private void Reset(string[] input)
+        {
             YardHeight = input.Length;
             YardWidth = input[0].Length;
             Cur = new char[YardWidth, YardHeight];
@@ -193,83 +198,150 @@ namespace AdventOfCode2018
 
             for (int y = 0; y < input.Length; y++)
             {
-                for(int x = 0; x < input.Length; x++)
+                for (int x = 0; x < input.Length; x++)
                 {
                     Cur[x, y] = input[y][x];
                 }
             }
+
+            Console.WindowHeight = Math.Max(Math.Min(YardHeight + YardHeight / 3, 64), Console.WindowHeight);
+        }
+
+        private void RunPuzzle(int minutes, bool printYard = false)
+        {
+            if(printYard) PrintYard(0);
+            for (int minute = 1; minute <= minutes; minute++)
+            {
+                for (int x = 0; x < YardWidth; x++)
+                {
+                    for (int y = 0; y < YardHeight; y++)
+                    {
+                        Next[x, y] = GetNextIteration(x, y);
+                    }
+                }
+
+                char[,] tmp = Cur;
+                Cur = Next;
+                Next = tmp;
+                if(printYard) PrintYard(minute);
+                if (minute % 10000 == 0) Console.Write('.');
+                
+            }
+        }
+
+        protected override string Part1()
+        {
+            Reset(Input);
+            RunPuzzle(10, false);
+
+            int treeCt = 0;
+            int lumberCt = 0;
+            foreach(char c in Cur)
+            {
+                if (c == Trees) treeCt++;
+                if (c == Lumber) lumberCt++;
+            }
+
+            return $"{treeCt} trees x {lumberCt} lumber = {treeCt * lumberCt}";
+        }
+
+        protected override string Part2()
+        {
+            int wow = 1000000000;
+            // dumb brute force ughhh
+            Reset(Input);
+            RunPuzzle(wow);
+            int treeCt = 0;
+            int lumberCt = 0;
+            foreach (char c in Cur)
+            {
+                if (c == Trees) treeCt++;
+                if (c == Lumber) lumberCt++;
+            }
+
+            return $"{treeCt} trees x {lumberCt} lumber = {treeCt * lumberCt}";
         }
 
         private IEnumerable<char> GetNeighbors(int x, int y)
         {
-            // order doesn't matter, as long as all valid neighbors are returned
-            if(x > 0)
+            if (y > 0)
             {
-                if(y > 0)
-                {
-                    yield return Cur[x - 1, y - 1];
-                    yield return Cur[x, y - 1];
-                    if (x < YardWidth - 1)
-                    {
-                        yield return Cur[x + 1, y - 1];
-                    }
-                }
-                yield return Cur[x - 1, y];
-
-                if (y < YardHeight - 1)
-                {
-                    yield return Cur[x - 1, y + 1];
-                }
+                if (x > 0) yield return Cur[x - 1, y - 1];
+                yield return Cur[x, y - 1];
+                if (x < YardWidth - 1) yield return Cur[x + 1, y - 1];
             }
 
-            if(x < YardWidth - 1)
+            if (x > 0) yield return Cur[x - 1, y];
+            if (x < YardWidth - 1) yield return Cur[x + 1, y];
+
+            if (y < YardHeight - 1)
             {
-                yield return Cur[x + 1, y];
-                if( y < YardHeight - 1)
-                {
-                    yield return Cur[x, y + 1];
-                    yield return Cur[x + 1, y + 1];
-                }
+                if (x > 0) yield return Cur[x - 1, y + 1];
+                yield return Cur[x, y + 1];
+                if (x < YardWidth - 1) yield return Cur[x + 1, y + 1];
             }
         }
 
         private char GetNextIteration(int x, int y)
         {
-            List<char> neighbors = GetNeighbors(x, y).ToList();
+            var neighbors = GetNeighbors(x, y).ToList();
+            char next = Open;
             switch (Cur[x, y])
             {
-
+                case Open:
+                    if (neighbors.Count(c => c == Trees) >= 3) next = Trees;
+                    else next = Open;
+                    break;
+                case Trees:
+                    if (neighbors.Count(c => c == Lumber) >= 3) next = Lumber;
+                    else next = Trees;
+                    break;
+                case Lumber:
+                    if (neighbors.Count(c => c == Lumber) > 0 && neighbors.Count(c => c == Trees) > 0) next = Lumber;
+                    else next = Open;
+                    break;
                 default:
-                break;
+                    break;
             }
 
-            if(Cur[x,y] == Open)
-            {
-
-            }
-
-            return Open;
+            return next;
         }
-        protected override string Part1()
-        {
 
-            for(int turn = 0; turn < 10; turn++)
+        private void PrintYard(int minute)
+        {
+            Console.CursorLeft = CursorPos.Item1;
+            Console.CursorTop = CursorPos.Item2 + 1;
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"After minute {minute}:");
+            for(int y = 0; y < YardHeight; y++)
             {
-                for(int x = 0; x < YardWidth; x++ )
+                for(int x = 0; x < YardWidth; x++)
                 {
-                    for(int y = 0; y < YardHeight; y++)
-                    {
-                        Next[x, y] = GetNextIteration(x, y);
-                    }
+                    Console.ForegroundColor = GetColor(Cur[x, y]);
+                    Console.Write(Cur[x, y]);
                 }
+
+                Console.WriteLine();
             }
 
-            return "";
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
-        protected override string Part2()
+        private ConsoleColor GetColor(char c)
         {
-            throw new NotImplementedException();
+            switch(c)
+            {
+                case Open:
+                    return ConsoleColor.White;
+                case Trees:
+                    return ConsoleColor.Green;
+                case Lumber:
+                    return ConsoleColor.DarkYellow;
+                default:
+                    return ConsoleColor.White;
+            }
         }
+
     }
 }
