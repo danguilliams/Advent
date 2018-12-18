@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2018
 {
@@ -51,7 +49,7 @@ namespace AdventOfCode2018
 
             //muli(multiply immediate) stores into register C the result of multiplying register A and value B.
             Ops.Add(new Operation("muli", (r, i) => {
-                r[i.C] = r[i.A] + i.B;
+                r[i.C] = r[i.A] * i.B;
             }));
 
             //banr(bitwise AND register) stores into register C the result of the bitwise AND of register A and register B.
@@ -127,7 +125,7 @@ namespace AdventOfCode2018
                 foreach (Operation op in Ops)
                 {
                     // init registers
-                    for (int i =0; i < 4; i++)
+                    for (int i = 0; i < 4; i++)
                     {
                         regs[i] = s.Before[i];
                     }
@@ -147,7 +145,7 @@ namespace AdventOfCode2018
                     if (isMatch)
                     {
                         matches++;
-                        s.MatchingOps.Add(op.Id);
+                        s.MatchingOps.Add(op);
                     }
                 }
 
@@ -157,36 +155,39 @@ namespace AdventOfCode2018
                 }
             }
 
-            return $"{totalPolyopSamples} that match 3 or more opcodes";
+            return $"{totalPolyopSamples} samples that match 3+ opcodes";
         }
 
         protected override string Part2()
         {
-            int umm = 0;
             Dictionary<int, Operation> opDict = new Dictionary<int, Operation>();
-            while (Samples.Any(s => s.MatchingOps.Count == 1))
+            List<Sample> remaining = Samples.ToList();
+            // handle simple cases where we know for sure which op code a instruction is
+            while (remaining.Any(s => s.MatchingOps.Count == 1))
             {
-                List<Sample> unique = Samples.Where(s => s.MatchingOps.Count == 1).ToList();
-                int currentOpCode = unique[0].Instr.OpCode;
-                if(currentOpCode == 8)
-                {
-                    umm++;
-                }
-                Operation op = Ops.First(o => o.Id == unique[0].MatchingOps[0]);
+                Sample unique = remaining.Where(s => s.MatchingOps.Count == 1).Last();
+                int currentOpCode = unique.Instr.OpCode;
+
+                Operation op = Ops.First(o => o == unique.MatchingOps[0]);
                 if(!opDict.ContainsKey(currentOpCode))
                 {
                     opDict[currentOpCode] = op;
                 }
                 // remove this op from any other samples that matched
-                foreach(Sample s in Samples)
+                foreach (Sample s in remaining)
                 {
-                    s.MatchingOps.Remove(op.Id);
+                    s.MatchingOps.Remove(op);
                 }
+                remaining.RemoveAll(s => s.Instr.OpCode == currentOpCode);
             }
 
-            IEnumerable<int> remainingOpCodes = Samples.Where(s => s.MatchingOps.Count > 0).Select(s => s.Instr.OpCode).Distinct();
-            IEnumerable<Operation> remainingOps = Ops.Where(o => !opDict.Values.Select(v => v.Id).Contains(o.Id));
-            return "";
+            int[] regs = { 0, 0, 0, 0 };
+            foreach(Instruction i in Instructions)
+            {
+                opDict[i.OpCode].Execute(regs, i);
+            }
+
+            return $"Register 0 = {regs[0]}";
         }
 
         [DebuggerDisplay("{Id}")]
@@ -208,7 +209,7 @@ namespace AdventOfCode2018
                 Before = ParseOps(before);
                 Instr = new Instruction(instr);
                 After = ParseOps(after);
-                MatchingOps = new List<string>();
+                MatchingOps = new List<Operation>();
                 Id = id;
             }
 
@@ -216,10 +217,10 @@ namespace AdventOfCode2018
             public int[] Before;
             public Instruction Instr;
             public int[] After;
-            public List<string> MatchingOps;
+            public List<Operation> MatchingOps;
         }
 
-        [DebuggerDisplay("{OpCode}:[{A},{B},{C}]")]
+        [DebuggerDisplay("Op:{OpCode} A:{A},B:{B},C:{C}")]
         private class Instruction
         {
             public Instruction(string instr)
