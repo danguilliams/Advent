@@ -58,7 +58,8 @@ The system's full passphrase list is available as your puzzle input. How many pa
 
             foreach (var pass in Passphrases)
             {
-                HashSet<string> unique = new HashSet<string>()
+                HashSet<string> unique = new HashSet<string>();
+                validCount++;
             }
         }
 
@@ -84,7 +85,7 @@ The system's full passphrase list is available as your puzzle input. How many pa
 
         protected override void ProcessInput()
         {
-            var lines = Input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            var lines = Input.Split(new char ['\n'], StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in lines)
             {
                 Passphrases.Add(new List<string>(s.Split(' ')));

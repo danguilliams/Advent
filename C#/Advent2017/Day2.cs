@@ -112,11 +112,11 @@ What is the sum of each row's result in your puzzle input?
 
         protected override void ProcessInput()
         {
-            string[] rows = Input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            string[] rows = Input.Split(new char['\n'], StringSplitOptions.RemoveEmptyEntries);
 
             for (int i = 0; i < 16; i++)
             {
-                string[] cols = rows[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                string[] cols = rows[i].Split(new char[' '], StringSplitOptions.RemoveEmptyEntries);
                 for (int j = 0; j < 16; j++)
                 {
                     I[i, j] = Int32.Parse(cols[j]);
