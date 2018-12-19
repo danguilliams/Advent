@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,9 +53,89 @@ namespace AdventOfCode2018
     public class Day19 : Day
     {
         public override int PuzzleDay => 19;
+        private List<Instruction> Instructions = new List<Instruction>();
+        private Dictionary<string, Action<int[],Instruction>> Ops = new Dictionary<string, Action<int[],Instruction>>(16);
+        private int IP = 0;
+        protected override void ProcessInput()
+        {
+            int nextId = 0;
+            foreach(string s in Input)
+            {
+                if(s.Contains('#'))
+                {
+                    // #ip 3
+                    IP = int.Parse(s.Substring(3));
+                }
+                else
+                {
+                    Instructions.Add(new Instruction(nextId++, s));
+                }
+            }
+
+            //addr (add register) stores into register C the result of adding register A and register B.
+            Ops["addr"] = (r, i) => { r[i.C] = r[i.A] + r[i.B]; };
+
+            //addi (add immediate) stores into register C the result of adding register A and value B.
+            Ops["addi"] = (r, i) => { r[i.C] = r[i.A] + i.B; };
+
+            //mulr(multiply register) stores into register C the result of multiplying register A and register B.
+            Ops["mulr"] = (r, i) => { r[i.C] = r[i.A] * r[i.B]; };
+
+            //muli(multiply immediate) stores into register C the result of multiplying register A and value B.
+            Ops["muli"] = (r, i) => { r[i.C] = r[i.A] * i.B; };
+
+            //banr(bitwise AND register) stores into register C the result of the bitwise AND of register A and register B.
+            Ops["banr"] = (r, i) => {  r[i.C] = r[i.A] & r[i.B]; };
+
+            //bani(bitwise AND immediate) stores into register C the result of the bitwise AND of register A and value B.
+            Ops["bani"] = (r, i) => { r[i.C] = r[i.A] & i.B; };
+
+            //borr(bitwise OR register) stores into register C the result of the bitwise OR of register A and register B.
+            Ops["borr"] = (r, i) => { r[i.C] = r[i.A] | r[i.B]; };
+
+            //bori(bitwise OR immediate) stores into register C the result of the bitwise OR of register A and value B.
+            Ops["bori"] = (r, i) => { r[i.C] = r[i.A] | i.B; };
+
+            //setr(set register) copies the contents of register A into register C. (Input B is ignored.)
+            Ops["setr"] = (r, i) => { r[i.C] = r[i.A]; };
+
+            //seti(set immediate) stores value A into register C. (Input B is ignored.)
+            Ops["seti"] = (r, i) => { r[i.C] = i.A; };
+
+            //gtir(greater - than immediate / register) sets register C to 1 if value A is greater than register B. Otherwise, register C is set to 0.
+            Ops["gtir"] = (r, i) => { r[i.C] = i.A > r[i.B] ? 1 : 0; };
+
+            //gtri(greater - than register / immediate) sets register C to 1 if register A is greater than value B. Otherwise, register C is set to 0.
+            Ops["gtri"] = (r, i) => { r[i.C] = r[i.A] > i.B ? 1 : 0; };
+
+            //gtrr(greater - than register / register) sets register C to 1 if register A is greater than register B. Otherwise, register C is set to 0.
+            Ops["gtrr"] = (r, i) => { r[i.C] = r[i.A] > r[i.B] ? 1 : 0; };
+
+            //eqir(equal immediate / register) sets register C to 1 if value A is equal to register B. Otherwise, register C is set to 0.
+            Ops["eqir"] = (r, i) => { r[i.C] = i.A == r[i.B] ? 1 : 0; };
+
+            //eqri(equal register / immediate) sets register C to 1 if register A is equal to value B. Otherwise, register C is set to 0.
+            Ops["eqri"] = (r, i) => { r[i.C] = r[i.A] == i.B ? 1 : 0; };
+
+            //eqrr(equal register / register) sets register C to 1 if register A is equal to register B. Otherwise, register C is set to 0.
+            Ops["eqrr"] = (r, i) => { r[i.C] = r[i.A] == r[i.B] ? 1 : 0; };
+        }
+
+        [DebuggerDisplay("{Id} {IType} {A} {B} {C}")]
+        private class Instruction
+        {
+            public string OpName;
+            public int Id, A, B, C;
+            public Action<int[], Instruction> Op;  
+        }
+
 
         protected override string Part1()
         {
+            foreach(Instruction i in Instructions)
+            {
+
+            }
             return "unsolved";
         }
 
