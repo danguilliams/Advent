@@ -232,26 +232,74 @@ namespace AdventOfCode2018
 
         protected override string Part1()
         {
-            Reset(testInput);
-            RunPuzzle(1000, true);
+            Reset(Input);
+            RunPuzzle(10, false);
 
-            int treeCt = 0;
-            int lumberCt = 0;
-            foreach(char c in Cur)
-            {
-                if (c == Trees) treeCt++;
-                if (c == Lumber) lumberCt++;
-            }
+            int value = GetResourceValue();
 
-            return $"{treeCt} trees x {lumberCt} lumber = {treeCt * lumberCt}";
+            return $"Resource value after 10 rounds: {value}";
         }
 
         protected override string Part2()
         {
-            int wow = 1000000000;
-            // dumb brute force ughhh
+            int minutes = 1000000000;          
             Reset(Input);
-            RunPuzzle(wow);
+            Dictionary<int, Tuple<int,int>> hashToRound = new Dictionary<int, Tuple<int, int>>();
+            int cycleLength = 0;
+            int minute = 0;
+            for (minute = 1; minute <= minutes; minute++)
+            {
+                for (int x = 0; x < YardWidth; x++)
+                {
+                    for (int y = 0; y < YardHeight; y++)
+                    {
+                        Next[x, y] = GetNextIteration(x, y);
+                    }
+                }
+
+                char[,] tmp = Cur;
+                Cur = Next;
+                Next = tmp;
+                // based on watching output, cycle is set after 600 turns
+                if (minute > 600)
+                {
+                    int hashCode = GetCurrentPuzzleHashCode();
+                    if(!hashToRound.ContainsKey(hashCode))
+                    {
+                        int yardScore = GetResourceValue();
+                        hashToRound[hashCode] = new Tuple<int, int>(minute, yardScore);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            // cycleLength = number of turns to get back to the same state
+            // minute = turn of the last round run
+            var roundToScore = hashToRound.Values.ToDictionary(p => p.Item1, p => p.Item2);
+            cycleLength = hashToRound.Keys.Count;
+            int firstRepeatRound = minute - cycleLength;
+            int remainingMinutes = minutes - firstRepeatRound;
+            int round = (remainingMinutes % cycleLength) + firstRepeatRound;
+            int finalRoundScore = roundToScore[round];
+            // too high: 218750 (had round length set wrong)
+            return $"Score after {minutes} minutes: {finalRoundScore}";
+        }
+
+        private int GetCurrentPuzzleHashCode()
+        {
+            StringBuilder sb = new StringBuilder(Cur.Length);
+            foreach(char c in Cur)
+            {
+                sb.Append(c);
+            }
+            string curStr = sb.ToString();
+            return curStr.GetHashCode();
+        }
+
+        private int GetResourceValue()
+        {
             int treeCt = 0;
             int lumberCt = 0;
             foreach (char c in Cur)
@@ -259,11 +307,10 @@ namespace AdventOfCode2018
                 if (c == Trees) treeCt++;
                 if (c == Lumber) lumberCt++;
             }
-
-            return $"{treeCt} trees x {lumberCt} lumber = {treeCt * lumberCt}";
+            return treeCt * lumberCt;
         }
 
-        private IEnumerable<char> GetNeighbors(int x, int y)
+    private IEnumerable<char> GetNeighbors(int x, int y)
         {
             if (y > 0)
             {
