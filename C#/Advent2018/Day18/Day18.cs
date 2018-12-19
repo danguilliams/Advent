@@ -204,7 +204,8 @@ namespace AdventOfCode2018
                 }
             }
 
-            Console.WindowHeight = Math.Max(Math.Min(YardHeight + YardHeight / 3, 64), Console.WindowHeight);
+            Console.WindowHeight = Math.Max(Math.Min(YardHeight + YardHeight / 3, 52), Console.WindowHeight);
+            Console.CursorVisible = false;
         }
 
         private void RunPuzzle(int minutes, bool printYard = false)
@@ -231,8 +232,8 @@ namespace AdventOfCode2018
 
         protected override string Part1()
         {
-            Reset(Input);
-            RunPuzzle(10, false);
+            Reset(testInput);
+            RunPuzzle(1000, true);
 
             int treeCt = 0;
             int lumberCt = 0;
